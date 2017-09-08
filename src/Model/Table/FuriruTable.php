@@ -63,7 +63,7 @@ class FuriruTable extends Table implements BookInfo
 
         $html->clear();
         return $arr;
-        
+
     }
 
 }
