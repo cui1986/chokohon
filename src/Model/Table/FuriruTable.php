@@ -6,10 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interface\BookInfo;
-<<<<<<< HEAD
-=======
 
->>>>>>> b44b5341fbd8d41c25ed9da59ee0e7a99221a19b
 
 class FuriruTable extends Table implements BookInfo
 {
@@ -46,7 +43,7 @@ class FuriruTable extends Table implements BookInfo
 
       $a1 = 0;
       foreach ($book_name as $book_name_value){
-        $arr[$a1++]['book_name'] = $book_name_value->plaintext;
+        $arr[$a1++]['book_name'] = trim($book_name_value->plaintext);
       //array_push($arr,$book_name_value);
       }
 
