@@ -8,6 +8,7 @@ use Cake\Validation\Validator;
 use App\Model\Interface\BookInfo;
 
 
+<<<<<<< HEAD
 class AmazonTable extends Table implements BookInfo
 {	
 	public function get_books(int $book_id){
@@ -64,3 +65,10 @@ class AmazonTable extends Table implements BookInfo
 		return $commodity;
 	}
 }
+=======
+class BooksTable extends Table implements BookInfo
+{
+
+}
+?>
+>>>>>>> de7e511b4098308846cfdf00c173ce4124164bb4
