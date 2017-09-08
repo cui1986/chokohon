@@ -6,6 +6,10 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interface\BookInfo;
+<<<<<<< HEAD
+=======
+
+>>>>>>> b44b5341fbd8d41c25ed9da59ee0e7a99221a19b
 
 class FuriruTable extends Table implements BookInfo
 {
@@ -67,3 +71,4 @@ class FuriruTable extends Table implements BookInfo
     }
 
 }
+?>
