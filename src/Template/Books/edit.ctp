@@ -5,11 +5,15 @@
 
 <title>无标题文档</title>
 <style>
+
 #tb td{border:1px solid #00BB00}
+
 </style>
 </head>
 
 <body>
+
+
 <div width="100%">
 <div style="width: 187px; display: initial; color: #000;">
   <table width="920" border="0">
@@ -25,12 +29,15 @@
 
 
 
- <img src="../../1-2_01_01.gif" width="782" height="259"></td>
+ <img src="../../編集画面_01.gif" width="782" height="259"></td>
           <td width="520">&nbsp;</td>
            <div style="position: absolute;/* background:url( */ margin: 10px 0px 0px 700px; left: 249px;" images="" 1-2_01_01.gif")="" no-repeat="" right:20px;top:500px;"=""><font size="5" color="#000"><strong>お知らせ</strong></font>
+
         </tr>
         <tr>
           <td>&nbsp;</td>
+         <div style="position: absolute;/* background:url( */ margin: 244px 0px 0px 550px; left: 249px;" images="" 1-2_01_01.gif")="" no-repeat="" right:20px;top:500px;"=""><font size="5" color="#000"><strong>図書ID:</strong></font>
+
           <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
@@ -40,8 +47,8 @@
 </div>
 
 
-<form name="demo" method="post" action="">
 
+<form name="demo" method="post" action="">
 <table width="1112" border="0">
   <tr>
     <td  width="232">&nbsp;</td>
@@ -113,7 +120,7 @@
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td>  <img src="../../1-2_03.gif" width="114" height="55" onclick="demo.submit()">
+    <td>  <img src="../../編集画面_06.gif" width="114" height="55" onclick="demo.submit()">
 </form></td>
   </tr>
 </table>
