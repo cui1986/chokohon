@@ -1,5 +1,5 @@
 <?php
-  include_once("");
+use App\Model\Table\AmazonTable;
 ?>
 
 <html>
@@ -12,8 +12,11 @@
     <h1>furiru</h1>
     <table class="vertical-table">
       <?php
-      $furiru =
-      foreach ($furiru as $value) {
+      $AmazonTable = new AmazonTable();
+      $furiru=$AmazonTable->get_books(4306085473);
+      var_dump($aa);
+
+      foreach ($AmazonTable as $value) {
 
       ?>
         <tr>
