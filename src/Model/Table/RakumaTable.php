@@ -11,6 +11,7 @@ use App\Model\Interfaces\BookInfo;
 class RakumaTable extends Table implements BookInfo
 {
 
+
   //最后修改时间2017年9月11日17
   //BY 周
   header('Content-Type:text/html;charset=utf-8');
@@ -105,5 +106,18 @@ class RakumaTable extends Table implements BookInfo
   function get_books(int $book_id){
       return $booksArray;
   }
+
+  public function initialize(array $config)
+  {
+
+    parent::initialize($config);
+    $this->setTable('rakuma_rules');
+
+    $this->hasOne('Books', [
+        'foreignKey' => 'id',
+        'joinType' => 'INNER'
+    ]);
+  }
+
 }
 ?>

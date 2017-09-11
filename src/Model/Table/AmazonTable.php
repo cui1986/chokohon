@@ -7,6 +7,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
 
+include_once 'simple_html_dom.php';
 
 class AmazonTable extends Table implements BookInfo
 {
@@ -64,4 +65,5 @@ class AmazonTable extends Table implements BookInfo
 		return $commodity;
 	}
 }
+
 ?>
