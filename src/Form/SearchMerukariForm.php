@@ -10,7 +10,11 @@ class SearchMerukariForm extends Form
 
     protected function _buildSchema(Schema $schema)
     {
-
+      return $schema->addField('key_words', 'string')
+            ->addField('category_id', ['type' => 'integer'])
+            ->addField('book_status', ['type' => 'integer'])
+            ->addField('delivery_id', ['type' => 'integer'])
+            ->addField('sale_status', ['type' => 'integer']);
     }
 
 }

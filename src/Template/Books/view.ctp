@@ -1,5 +1,5 @@
 <?php
-  include_once("");
+use App\Model\Table\MerukariTable;
 ?>
 
 <html>
@@ -9,15 +9,19 @@
 </head>
 <body>
  <div class="books view large-9 medium-8 columns content">
-    <h1>furiru</h1>
-    <table class="vertical-table">
+    <h1>Merukari</h1>
+    <table>
       <?php
-      $furiru =
-      foreach ($furiru as $value) {
-
+      $merukari = new MerukariTable;
+      $merukari = $merukari->get_books(1);
+      foreach ($merukari as $value) {
       ?>
         <tr>
-            <td></td>
+            <td><?php echo $value["price"] ?></td>
+            <td><?php echo $value["book_img"] ?></td>
+            <td><?php echo $value["sale_status"] ?></td>
+            <td><?php echo $value["book_name"] ?></td>
+            <td><?php echo $value["buy_link"] ?></td>
         </tr>
       <?php } ?>
 
