@@ -8,6 +8,7 @@ use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
 
 
+
 class FuriruTable extends Table implements BookInfo
 {
 
@@ -46,7 +47,7 @@ class FuriruTable extends Table implements BookInfo
 
       $a1 = 0;
       foreach ($book_name as $book_name_value){
-        $arr[$a1++]['book_name'] = $book_name_value->plaintext;
+        $arr[$a1++]['book_name'] = trim($book_name_value->plaintext);
       //array_push($arr,$book_name_value);
       }
 
