@@ -5,14 +5,21 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use App\Model\Interface\BookInfo;
+use App\Model\Interfaces\BookInfo;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 31ae77df0ba9ce3cb989e83d9627897bf423d0e0
 
 
 class FuriruTable extends Table implements BookInfo
 {
+
+
+
     function get_books(int $book_id){
 
-      require_once('simple_html_dom.php');
+
 
       $html = new simple_html_dom();
 
@@ -66,6 +73,20 @@ class FuriruTable extends Table implements BookInfo
         return $arr;
 
     }
+    public function initialize(array $config)
+    {
+
+      parent::initialize($config);
+      $this->setTable('fril_rules');
+
+      $this->hasOne('Books', [
+          'foreignKey' => 'id',
+          'joinType' => 'INNER'
+      ]);
+    }
+
+
+
 
 }
 ?>

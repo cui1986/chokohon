@@ -39,6 +39,21 @@ class MerukariTable extends Table implements BookInfo
 
     $html->clear();
 
+  public function initialize(array $config)
+  {
+
+    parent::initialize($config);
+    $this->setTable('merukari_rules');
+
+    $this->hasOne('Books', [
+        'foreignKey' => 'id',
+        'joinType' => 'INNER'
+    ]);
+  }
+  public function get_books(int $book_id){
+
+  }
+
     return $data_array;
   }
 }

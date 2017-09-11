@@ -5,8 +5,9 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use App\Model\Interface\BookInfo;
+use App\Model\Interfaces\BookInfo;
 
+include_once 'simple_html_dom.php';
 
 class AmazonTable extends Table implements BookInfo
 {
@@ -65,8 +66,4 @@ class AmazonTable extends Table implements BookInfo
 	}
 }
 
-class BooksTable extends Table implements BookInfo
-{
-
-}
 ?>
