@@ -5,12 +5,11 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use App\Model\Interface\BookInfo;
+use App\Model\Interfaces\BookInfo;
 
 
-<<<<<<< HEAD
 class AmazonTable extends Table implements BookInfo
-{	
+{
 	public function get_books(int $book_id){
 		$html = new simple_html_dom();
 		if(!isset($book_id)){
@@ -25,7 +24,7 @@ class AmazonTable extends Table implements BookInfo
 		//  		'Distribution' =>  array()
 		// 	)
 		// );
-		
+
 		//定位到表格位子
 		$es = $html->find('div[class="a-row a-spacing-mini olpOffer"]');
 
@@ -36,7 +35,7 @@ class AmazonTable extends Table implements BookInfo
 		foreach ($es as $value) {
 			$commodity[$a++]['price']=$value->plaintext;
 		}
-		
+
 		//定位到商品介绍
 		$es = $html->find('div[class="a-column a-span3 olpConditionColumn"]');
 		$a=0;
@@ -44,7 +43,7 @@ class AmazonTable extends Table implements BookInfo
 		foreach ($es as $value) {
 			$commodity[$a++]['quality']=$value->plaintext;
 		}
-		
+
 		//定位到制造商
 		$es = $html->find('div[class="a-column a-span2 olpSellerColumn"]');
 		$a=0;
@@ -61,14 +60,8 @@ class AmazonTable extends Table implements BookInfo
 			$commodity[$a++]['Distribution']=$value->plaintext;
 
 		}
-		
+
 		return $commodity;
 	}
 }
-=======
-class BooksTable extends Table implements BookInfo
-{
-
-}
 ?>
->>>>>>> de7e511b4098308846cfdf00c173ce4124164bb4
