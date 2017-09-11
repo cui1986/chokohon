@@ -42,3 +42,4 @@ class MerukariTable extends Table implements BookInfo
     return $data_array;
   }
 }
+?>
