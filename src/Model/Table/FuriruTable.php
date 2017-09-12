@@ -6,7 +6,10 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
+<<<<<<< HEAD
+=======
 
+>>>>>>> 31ae77df0ba9ce3cb989e83d9627897bf423d0e0
 
 
 class FuriruTable extends Table implements BookInfo
@@ -81,6 +84,9 @@ class FuriruTable extends Table implements BookInfo
           'joinType' => 'INNER'
       ]);
     }
+
+
+
 
 }
 ?>

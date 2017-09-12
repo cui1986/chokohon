@@ -5,7 +5,13 @@
 
 <title>无标题文档</title>
 <style>
+<<<<<<< HEAD
 #tb td{border:1px solid #00BB00}
+=======
+
+#tb td{border:1px solid #00BB00}
+
+>>>>>>> 07b9850b3c8901e1500a9f611ba373fc496ce0d6
 </style>
 </head>
 
@@ -20,7 +26,11 @@
         <tr>
           <td width="384">&nbsp;</td>
           <td width="520">
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 07b9850b3c8901e1500a9f611ba373fc496ce0d6
           <div style="position: absolute;/* background:url( */ margin: 60px 0px 0px 700px; left: 249px;" images="" 1-2_01_01.gif")="" no-repeat="" right:10px;top:20px;"=""><font size="2" color="#fff">ご利用ガイド</font>
 
 </div>
@@ -68,8 +78,13 @@
           <p>コード</p></td>
 
         <td width="455">
+<<<<<<< HEAD
 
 
+=======
+          
+          
+>>>>>>> 07b9850b3c8901e1500a9f611ba373fc496ce0d6
           <div style="position: absolute; margin: 60px 30px 0px 90px  height: 100px;margin-top: -36px;"><input type="text" name="textfield" id="textfield" height:="" 10px="" style="
     height: 50px;
     margin-left: 100px;
@@ -90,8 +105,13 @@
       <tr>
         <td height="56">書   名</td>
         <td><div style="position: absolute; margin:100px 30px 0px 90px height: 100px;
+<<<<<<< HEAD
         margin-top: -36px;"><input type="text" name="textfield" id="textfield"
 
+=======
+        margin-top: -36px;"><input type="text" name="textfield" id="textfield" 
+        
+>>>>>>> 07b9850b3c8901e1500a9f611ba373fc496ce0d6
        style="height: 40px;
        margin-left:100px;
        margin-top: 13px;"></td>
@@ -124,3 +144,8 @@
 </table>
 </body>
 </html>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 07b9850b3c8901e1500a9f611ba373fc496ce0d6

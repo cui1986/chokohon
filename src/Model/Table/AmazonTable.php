@@ -65,12 +65,5 @@ class AmazonTable extends Table implements BookInfo
 		return $commodity;
 	}
 }
-<<<<<<< HEAD
-=======
 
-class BooksTable extends Table implements BookInfo
-{
-
-}
->>>>>>> 95b771cb72d1edbed38aa5008418c9d0e81b76ed
 ?>
