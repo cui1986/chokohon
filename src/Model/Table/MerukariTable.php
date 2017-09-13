@@ -38,7 +38,8 @@ class MerukariTable extends Table implements BookInfo
     }
 
     $html->clear();
-
+    return $data_array;
+  }
   public function initialize(array $config)
   {
 
@@ -49,12 +50,6 @@ class MerukariTable extends Table implements BookInfo
         'foreignKey' => 'id',
         'joinType' => 'INNER'
     ]);
-  }
-  public function get_books(int $book_id){
-
-  }
-
-    return $data_array;
   }
 }
 ?>

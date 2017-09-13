@@ -7,6 +7,7 @@ use App\Form\SearchFuriruForm;
 use App\Form\SearchMerukariForm;
 use App\Form\SearchRakumaForm;
 
+
 class BooksController extends AppController
 {
 
@@ -70,12 +71,31 @@ class BooksController extends AppController
 
   public function edit($id = null)
   {
+    $this->loadModel('Books');
+    $this->loadModel('Furiru');
+    $this->loadModel('Merukari');
+    $this->loadModel('Rakuma');
+
     $book = $this->Books->get($id, [
         'contain' => [ ]
     ]);
 
     if ($this->request->is(['post','put','patch'])) {
         $book = $this->Books->patchEntity($book, $this->request->getData());
+        if($this->request->getData("book_name") && $this->request->getData("book_name") != $book->book_name ){
+
+            $furiru = $this->Furiru->newEntity();
+            $merukari = $this->Merukari->newEntity();
+            $rakuma = $this->Rakuma->newEntity();
+
+            $furiru->key_words = $this->request->getData("book_name");
+            $merukari->key_words = $this->request->getData("book_name");
+            $rakuma->key_words = $this->request->getData("book_name");
+
+
+            $book->furiru = $furiru;
+            $book->merukari = $merukari;
+            $book->rakuma = $rakuma;
 
         if ($this->Books->save($book)) {
             $this->Flash->success(__('編集は成功しました.'));
@@ -89,7 +109,7 @@ class BooksController extends AppController
 
   }
 
-
+}
   public function delete($id = null)
   {
     $this->request->allowMethod(['post', 'delete']);

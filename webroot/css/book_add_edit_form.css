@@ -1,0 +1,69 @@
+.book_book_form_box{
+    margin: 0 auto;
+    width: 374px;
+    border-style: solid;
+    border-color: #eaeaea;
+    border-width: 4px;
+    padding: 0px 20px 27px 26px;
+    color: #292828;
+    font-size: 18px;
+    margin-top: 60px;
+}
+.book_footer{
+    height: 200px;
+}
+
+.book_form_title{
+    text-align: center;
+}
+
+.book_sub_title_text{
+    display: inline-block;
+    background-color: white;
+    position: relative;
+    left: 97px;
+    top: -10px;
+    text-align: center;
+    font-size: 23px;
+    padding: 7px 38px;
+    line-height: 0px;
+}
+.book_form_login>form{
+    padding-top: 24px;
+    width: 100%;
+    margin:0 auto;
+}
+.book_input_style{
+    display: inline-block;
+    width: 100%;
+    line-height: 56px;
+}
+.book_input_style>span{
+    display: inline-block;
+    float: left;
+    font-size: 16px;
+
+}
+.book_input_style>input{
+    display: Inline;
+    float: right;
+    width: 210px;
+    height: 32px;
+    font-size: 20px;
+    margin: 9px 0px 0px 0px;
+    padding-left: 6px;
+}
+
+.book_submit>input{
+    padding: 3px;
+    font-size: 20px;
+    margin: 0 auto;
+    width: 100%;
+    float: right;
+    height: 45px;
+    margin-top: 12px;
+}
+.book_submit{
+    margin:0 auto;
+    font-size: 20px;
+}
