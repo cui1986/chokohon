@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+
 body{
   font-size: 18px;
 }
 .book_book_form_box{
-    margin: 0 auto;
+    margin: 0 auto
     width: 374px;
     border-style: solid;
     border-color: #eaeaea;
@@ -106,8 +106,6 @@ div.divcss5 img{
   background-color:#156f1d;
   height:50px;
 }
-
-
 div.navi div{
   float: right;
   margin-top:8px;
