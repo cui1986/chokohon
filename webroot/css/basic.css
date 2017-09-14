@@ -2,19 +2,14 @@
 body{
   font-size: 18px;
 }
-=======
->>>>>>> d4b5801fb459773db67ce5693baef77f9125249b
 .book_book_form_box{
     margin: 0 auto;
     width: 374px;
     border-style: solid;
     border-color: #eaeaea;
     border-width: 4px;
-<<<<<<< HEAD
     padding: 0px 20px 27px 26px;
-=======
     padding: 0px 20px 70px 26px;
->>>>>>> d4b5801fb459773db67ce5693baef77f9125249b
     color: #292828;
     font-size: 18px;
     margin-top: 60px;
@@ -200,7 +195,7 @@ div.books-index table tbody{
 div.books-index table tbody tr td button{
   background: #96c83d;
 }
-<<<<<<< HEAD
+
 
 
 
@@ -280,6 +275,4 @@ float: left;
   margin-left: -626px;
 }
 
--->
-=======
->>>>>>> d4b5801fb459773db67ce5693baef77f9125249b
+
