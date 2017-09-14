@@ -6,6 +6,9 @@ use Cake\I18n\Date;
 use App\Form\SearchFuriruForm;
 use App\Form\SearchMerukariForm;
 use App\Form\SearchRakumaForm;
+use App\Model\Table\RakumaTable;
+use Cake\ORM\TableRegistry;
+
 
 
 class BooksController extends AppController
@@ -123,5 +126,11 @@ class BooksController extends AppController
     return $this->redirect(['action' => 'index']);
 
   }
+    public function viewtest($id = null) {
+        
+        $rakuma = new RakumaTable;
+        $rakuma = $rakuma->get_books($id);
+        $this->set(compact('rakuma'));
+    }
 
 }
