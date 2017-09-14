@@ -21,7 +21,7 @@
     display: inline-block;
     background-color: white;
     position: relative;
-    left: 97px;
+    left: 120px;;
     top: -10px;
     text-align: center;
     font-size: 23px;
@@ -187,6 +187,18 @@ div.books-index table tbody{
   background-color: #e2efda;
 }
 
-div.books-index table tbody tr td button{
+div.books-index table tbody tr td input{
   background: #96c83d;
+  width: 70px;
+  height: 30px;
+}
+
+.book_input_style>textarea{
+    display: Inline;
+    float: right;
+    width: 210px;
+    height: 32px;
+    font-size: 20px;
+    margin: 9px 0px 0px 0px;
+    padding-left: 6px;
 }
