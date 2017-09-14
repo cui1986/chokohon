@@ -7,16 +7,15 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
 
-include_once 'simple_html_dom.php';
-
 class AmazonTable extends Table implements BookInfo
 {
 	public function get_books(int $book_id){
-		$html = new simple_html_dom();
+
 		if(!isset($book_id)){
 			return  "url有误";
 		}
-		$html->load_file('https://www.amazon.co.jp/gp/offer-listing/'.$book_id);
+		// $html->load_file('https://www.amazon.co.jp/gp/offer-listing/'.$book_id);
+		$html= file_get_html('https://www.amazon.co.jp/gp/offer-listing/4816358927');
 		// $commodity = array(
 		// 	array(
 		// 		'price'        =>  array(),
@@ -25,6 +24,7 @@ class AmazonTable extends Table implements BookInfo
 		//  		'Distribution' =>  array()
 		// 	)
 		// );
+
 
 		//定位到表格位子
 		$es = $html->find('div[class="a-row a-spacing-mini olpOffer"]');
@@ -64,6 +64,7 @@ class AmazonTable extends Table implements BookInfo
 
 		return $commodity;
 	}
+
 }
 
 ?>

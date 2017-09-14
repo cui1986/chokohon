@@ -6,6 +6,9 @@ use Cake\I18n\Date;
 use App\Form\SearchFuriruForm;
 use App\Form\SearchMerukariForm;
 use App\Form\SearchRakumaForm;
+use App\Model\Table\MerukariTable;
+use App\Model\Table\FuriruTable;
+use App\Model\Table\RakumaTable;
 
 class BooksController extends AppController
 {
@@ -13,18 +16,84 @@ class BooksController extends AppController
   public function index()
   {
     $this->loadModel('Books');
+    $searchMerukariForm = new SearchMerukariForm();
+
+    // $furiru_model   = new FuriruTable;
+    // //id=2のデータを転送させるため
+    $furiru_model = $this->LoadModel("FrilRules");
+    $result = $furiru_model->get_books(1);
+
+    // var_dump($result);
+    // exit();
 
     $books = $this->paginate($this->Books);
 
+
+    $this->set(compact('searchMerukariForm'));
     $this->set(compact('books'));
-    $this->set('_serialize', ['books']);
 
   }
 
 
-  public function view($id = null)
+  public function viewMerukari($id = null)
   {
 
+    $searchMerukariForm = new SearchMerukariForm();
+
+    // $furiru_model   = new FuriruTable;
+    // //id=2のデータを転送させるため
+    // // $furiru_model = $this->LoadModel("FrilRules");
+    // $result = $furiru_model->get_books(1);
+
+    //テストの内容！
+    $merukari = new MerukariTable();
+    $merukari = $merukari->get_books(1);
+
+    // var_dump($merukari);
+    // exit();
+    $this->set(compact('searchMerukariForm'));
+    $this->set(compact('books'));
+  }
+
+  public function viewFuriru($id = null)
+  {
+
+    $searchFuriruForm = new SearchFuriruForm();
+
+
+
+
+    //テストの内容！
+
+    $furiru = new FuriruTable();
+    $furiru = $furiru->get_books(1);
+
+    // var_dump($merukari);
+    // exit();
+
+    $this->set(compact('searchFuriruForm'));
+    $this->set(compact('books'));
+  }
+
+  public function viewRakuma($id = null)
+  {
+
+    $searchRakumaForm = new SearchRakumaForm();
+
+    // $furiru_model   = new FuriruTable;
+    // //id=2のデータを転送させるため
+    // // $furiru_model = $this->LoadModel("FrilRules");
+    // $result = $furiru_model->get_books(1);
+
+    //テストの内容！
+
+    $merukari = new FuriruTable();
+    $merukari = $merukari->get_books(1);
+
+    // var_dump($merukari);
+    // exit();
+    $this->set(compact('books'));
+    $this->set(compact('searchMerukariForm'));
 
   }
 
@@ -70,22 +139,7 @@ class BooksController extends AppController
 
   public function edit($id = null)
   {
-    $book = $this->Books->get($id, [
-        'contain' => [ ]
-    ]);
 
-    if ($this->request->is(['post','put','patch'])) {
-        $book = $this->Books->patchEntity($book, $this->request->getData());
-
-        if ($this->Books->save($book)) {
-            $this->Flash->success(__('編集は成功しました.'));
-
-            return $this->redirect(['action' => 'index']);
-        }
-        $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
-    }
-    $this->set(compact('book'));
-    $this->set('_serialize', ['book']);
 
   }
 
