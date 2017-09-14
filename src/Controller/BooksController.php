@@ -10,6 +10,7 @@ use App\Model\Table\MerukariTable;
 use App\Model\Table\FuriruTable;
 use App\Model\Table\RakumaTable;
 
+
 class BooksController extends AppController
 {
 
@@ -139,11 +140,45 @@ class BooksController extends AppController
 
   public function edit($id = null)
   {
+    $this->loadModel('Books');
+    $this->loadModel('Furiru');
+    $this->loadModel('Merukari');
+    $this->loadModel('Rakuma');
 
+    $book = $this->Books->get($id, [
+        'contain' => [ ]
+    ]);
+
+    if ($this->request->is(['post','put','patch'])) {
+        $book = $this->Books->patchEntity($book, $this->request->getData());
+        if($this->request->getData("book_name") && $this->request->getData("book_name") != $book->book_name ){
+
+            $furiru = $this->Furiru->newEntity();
+            $merukari = $this->Merukari->newEntity();
+            $rakuma = $this->Rakuma->newEntity();
+
+            $furiru->key_words = $this->request->getData("book_name");
+            $merukari->key_words = $this->request->getData("book_name");
+            $rakuma->key_words = $this->request->getData("book_name");
+
+
+            $book->furiru = $furiru;
+            $book->merukari = $merukari;
+            $book->rakuma = $rakuma;
+
+        if ($this->Books->save($book)) {
+            $this->Flash->success(__('編集は成功しました.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
+    }
+    $this->set(compact('book'));
+    $this->set('_serialize', ['book']);
 
   }
 
-
+}
   public function delete($id = null)
   {
     $this->request->allowMethod(['post', 'delete']);
