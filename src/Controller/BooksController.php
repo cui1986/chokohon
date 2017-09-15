@@ -8,6 +8,8 @@ use App\Form\SearchMerukariForm;
 use App\Form\SearchRakumaForm;
 use App\Model\Table\MerukariTable;
 use Cake\ORM\TableRegistry;
+use App\Model\Table\RakumaTable;
+
 
 class BooksController extends AppController
 {
