@@ -3,11 +3,13 @@
 <script>
     $(document).ready(function () {
         $("#key_words").val("<?php echo $rules["key_words"] ?>");
-        $("#category_id").find("option[value='<?php echo $rules["category_id"] ?>']").attr("selected", true);
-        $("#condition_type").find("option[value='<?php echo $rules["condition_type"] ?>']").attr("selected", true);
-        $("#postage_type").find("option[value='<?php echo $rules["postage_type"] ?>']").attr("selected", true);
-        $("#selling_status").find("option[value='<?php echo $rules["selling_status"] ?>']").attr("selected", true);
-
+        function select_form(formId, optionValue) {
+            $("#" + formId).find("option[value='" + optionValue + "']").attr("selected", true);
+        }
+        select_form("category_id",<?php echo $rules["category_id"] ?>);
+        select_form("condition_type",<?php echo $rules["condition_type"] ?>);
+        select_form("postage_type",<?php echo $rules["postage_type"] ?>);
+        select_form("selling_status",<?php echo $rules["selling_status"] ?>);
     });
 </script>
 
