@@ -3,3 +3,5 @@
 /tmp/*
 logs/*
 
+config/app.default.php.bak
+config/app.default.php

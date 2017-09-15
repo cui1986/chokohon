@@ -6,68 +6,13 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
+<<<<<<< HEAD
+=======
+use Cake\ORM\TableRegistry;
+>>>>>>> fd1ce274aa90490c4d066a8a706b5cfc2d538f74
 
 class FuriruTable extends Table implements BookInfo
 {
-
-
-
-    function get_books(int $book_id){
-
-
-
-      $html = new simple_html_dom();
-
-      // $html = file_get_html( 'https://fril.jp/s?category_id=733&status=new' );
-      $html = file_get_html($book_id);
-
-      //aタグ
-      $a = $html->find('.link_search_image');
-      //書名
-      $book_name = $html->find( '.item-box__item-name' );
-      //値段
-      // $price = $html->find(span['itemprop=price']);
-      $price = $html->find('span[itemprop=price]');
-      //販売状況
-      $sale_status = $html->find('.item-box__soldout_ribbon');
-      //画像の保存場所
-      $img_src_name = "data-original";
-
-      $arr = array();
-
-      $a1 = 0;
-      foreach ($a as  $value){
-      if(!empty($sale_status)){
-        echo $value->children[1]->$img_src_name."は売り切れました";
-      }
-         $arr[$a1++]['book_image']=$value->children[1]->$img_src_name;
-      }
-
-      $a1 = 0;
-      foreach ($book_name as $book_name_value){
-        $arr[$a1++]['book_name'] = trim($book_name_value->plaintext);
-      //array_push($arr,$book_name_value);
-      }
-
-      $a1 = 0;
-      foreach($price as $price_value){
-        $arr[$a1++]['book_price'] = $price_value->plaintext;
-      }
-
-      $a1 = 0;
-      foreach ($sale_status as  $sale_status_value){
-        $arr[$a1++]['book_status'] = $sale_status_value->plaintext;
-      }
-
-      $a1 = 0;
-      foreach ($a as  $value){
-        $arr[$a1++]['book_link'] = $value->href;
-      }
-
-        $html->clear();
-        return $arr;
-
-    }
     public function initialize(array $config)
     {
 
@@ -80,8 +25,43 @@ class FuriruTable extends Table implements BookInfo
       ]);
     }
 
+    function get_books(int $book_id){
 
+      $book_model = TableRegistry::get('FrilRules');
+      $books = $book_model->get($book_id);
 
+      $key_words = $books["key_words"];
+      $category_id = $books["category_id"];
+      $book_status = $books["book_status"];
+      $delivery_id = $books["delivery_id"];
 
+      $url = "https://fril.jp/s?query={$key_words}&category_id={$category_id}&status={$book_status}&carriage={$delivery_id}" ;
+      $html = file_get_html($url);
+
+      $data_array = array();
+
+      $results = $html->find('.item');
+
+      foreach ($results as $result) {
+
+        $temp_array = array();
+        $img_src_name = "data-original";
+        $temp_array['book_link'] = $result->children[0]->children[0]->children[0]->href;
+        $temp_array['book_image'] =  $result->children[0]->children[0]->children[0]->children[1]->$img_src_name;
+        $temp_array['book_name'] =  $result->children[0]->children[1]->children[1]->children[0]->children[0]->plaintext;
+
+        if(isset($result->children[0]->children[1]->children[0]->children[2])){
+          $temp_array['book_status'] = $result->children[0]->children[1]->children[0]->children[2]->plaintext;
+        }else {
+          $temp_array['book_status'] = "";
+        }
+        $temp_array['book_price'] = $result->children[0]->children[1]->children[2]->children[0]->children[1]->plaintext;
+
+        $data_array[] = $temp_array;
+      }
+
+      $html->clear();
+      return $data_array;
+    }
 }
 ?>

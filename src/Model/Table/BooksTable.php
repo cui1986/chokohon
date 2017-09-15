@@ -49,7 +49,7 @@ class BooksTable extends Table implements BookInfo
               ->add('book_asin', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
           $validator
-              ->allowEmpty('book_name');
+              ->notEmpty('book_name');
 
           $validator
               ->allowEmpty('book_comment');

@@ -105,13 +105,15 @@ class BooksController extends AppController
     return $this->redirect(['action' => 'index']);
 
   }
+
+
   public function viewMerukari($book_id = null){
 
     $searchmerukariform = new SearchMerukariForm();
 
     $book_rules = TableRegistry::get('merukari_rules');
 
-    $rule = $book_rules->get($book_id);
+    $rule = $book_rules->get(['book_id' => $book_id]);
 
     // $this->request->data('key_words',$rule["key_words"]);
     // $this->request->data('category_id',$rule["category_id"]);
@@ -162,7 +164,7 @@ class BooksController extends AppController
     $this->set(compact('searchmerukariform'));
   }
 
-  function retun_json_code(array $data_array){
+  function json_code(array $data_array){
 
       $json_code = json_encode($data_array);
 

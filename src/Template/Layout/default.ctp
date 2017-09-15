@@ -1,52 +1,46 @@
-<?php
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.10.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-
-$cakeDescription = 'CakePHP: the rapid development php framework';
-?>
 <!DOCTYPE html>
 <html>
 <head>
-    <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
-
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
-
-    <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
+  <?= $this->Html->charset() ?>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>chokohon</title>
+  <?= $this->Html->meta('icon') ?>
+  <?= $this->Html->css('basic.css') ?>
+  <?= $this->fetch('meta') ?>
+  <?= $this->fetch('css') ?>
+  <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
+     <div class="divcss5">
+         <?php echo $this->Html->image("logo.png");?>
+     </div>
+     <div class="divcss5 navi">
+        <div>
+            <h4>
+                <font>お知らせ｜ご利用ガイド</font>
+            </h4>
+        </div>
+     </div>
 
-    </nav>
-    <?= $this->Flash->render() ?>
-    <div class="container clearfix">
-        <?= $this->fetch('content') ?>
-    </div>
-    <footer>
-    </footer>
-</body>
-</html>
+     <div class="divcss5 link">
+        <div>
+            <h4>
+                <font>
+									<button type="button">図書新規</button>
+								</font>
+            </h4>
+        </div>
+     </div>
+     <div class="divcss5 title">
+         <div>
+             <h1>図書一覧</h1>
+         </div>
+     </div>
+
+     <div class="divcss5 blank"></div>
+
+
+    <?= $this->fetch('content') ?>
+
+  </body>
+  </html>

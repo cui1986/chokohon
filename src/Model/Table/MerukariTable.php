@@ -25,7 +25,7 @@ class MerukariTable extends Table implements BookInfo
 
     $book_rules = TableRegistry::get('merukari_rules');
 
-    $rule = $book_rules->get($book_id);
+    $rule = $book_rules->get(['book_id' => $book_id]);
     $data_array = array();
 
     //取检索条件
