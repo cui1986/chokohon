@@ -105,70 +105,33 @@ class BooksController extends AppController
     return $this->redirect(['action' => 'index']);
 
   }
+  public function view_rakuma($id = null) {
 
-
-  public function viewMerukari($book_id = null){
-
-    $searchmerukariform = new SearchMerukariForm();
-
-    $book_rules = TableRegistry::get('merukari_rules');
-
-    $rule = $book_rules->get(['book_id' => $book_id]);
-
-    // $this->request->data('key_words',$rule["key_words"]);
-    // $this->request->data('category_id',$rule["category_id"]);
-    // $this->request->data('book_status',$rule["book_status"]);
-    // $this->request->data('delivery_id',$rule["delivery_id"]);
-    // $this->request->data('sale_status',$rule["sale_status"]);
-
-    if($this->request->is('get') && (($this->request->getQuery('form_name')) == 'searchform_name')){
-
-        $rule['key_words'] = $this->request->getQuery('key_words');
-        $rule['category_id'] = $this->request->getQuery('category_id');
-        $rule['book_status'] = $this->request->getQuery('book_status');
-        $rule['delivery_id'] = $this->request->getQuery('delivery_id');
-
-        if ($this->request->getQuery('sale_status') == 1) {
-            $rule['on_sale'] = 1;
-            $rule['sold_out'] = '';
-        }elseif ($this->request->getQuery('sale_status') == 2){
-            $rule['on_sale'] = '';
-            $rule['sold_out'] = 1;
-        }else {
-            $rule['on_sale'] = 1;
-            $rule['sold_out'] = 1;
+        $queryData = $this->request->getQuery();
+        $id = isset($id) ? $id : $id = $queryData["id"];
+        if (!isset($queryData["key_word"]) || $queryData["key_word"] == NULL) {
+            $this->Flash->error(__('検索キーワードを入力してください'));
         }
-        $rule['sale_status'] = $this->request->getQuery('sale_status');
-        $book_rules->save($rule);
+        if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {
+            $rulesTable = TableRegistry::get('RakumaRules');
+            $rules = $rulesTable->get(["book_id" => $id]);
 
-        // $this->request->data('key_words',$rule["key_words"]);
-        // $this->request->data('category_id',$rule["category_id"]);
-        // $this->request->data('book_status',$rule["book_status"]);
-        // $this->request->data('delivery_id',$rule["delivery_id"]);
-        // $this->request->data('sale_status',$rule["sale_status"]);
+
+            $rules = $rulesTable->patchEntity($rules, $queryData);
+
+            if ($rulesTable->save($rules)) {
+                $this->Flash->success(__('検索条件が更新されました'));
+            } else {
+                $this->Flash->error(__('システムエラー、保存できません'));
+
+            }
+            if ($id) {
+                $rakuma = new RakumaTable;
+                $rakuma = $rakuma->get_books($id);
+            }
+            $this->set(compact('rakuma'));
+            $this->set(compact('id'));
+            $this->set(compact('queryData'));
 
     }
-
-    $this->request->data('key_words',$rule["key_words"]);
-    $this->request->data('category_id',$rule["category_id"]);
-    $this->request->data('book_status',$rule["book_status"]);
-    $this->request->data('delivery_id',$rule["delivery_id"]);
-    $this->request->data('sale_status',$rule["sale_status"]);
-
-
-
-    $this->loadModel('Merukari');
-    $merukari = new MerukariTable();
-    $merukari = $merukari->get_books($book_id);
-    $this->set(compact('merukari'));
-    $this->set(compact('searchmerukariform'));
-  }
-
-  function json_code(array $data_array){
-
-      $json_code = json_encode($data_array);
-
-      return $json_code;
-  }
-
 }
