@@ -14,7 +14,7 @@ class RakumaTable extends Table implements BookInfo
 
   //最后修改时间2017年9月11日17
   //BY 周
-  header('Content-Type:text/html;charset=utf-8');
+  // header('Content-Type:text/html;charset=utf-8');
   //定义输出页面编码
 
   function getRakumaUrl($keyWord = NULL, $categoryId = NULL, $conditionType = NULL, $postageType = NULL, $sellingStatus = NULL) {
@@ -88,8 +88,6 @@ class RakumaTable extends Table implements BookInfo
                   $bookslist[$fristArray]["sale_status"] = ($booksArray["productList"][$fristArray]["status"] === 1) ? "SOLD OUT" : "ON SOLD";
                   $bookslist[$fristArray]["buy_link"] = "https://rakuma.rakuten.co.jp/item/" . $booksArray["productList"][$fristArray]["id"];
                   $bookslist[$fristArray]["book_img"] = "https://rakuma.r10s.jp/d/strg/ctrl/25/" . $booksArray["productList"][$fristArray]["image"];
-
-                   return $bookslist;
               }
           }
       } else {
@@ -100,11 +98,12 @@ class RakumaTable extends Table implements BookInfo
           $bookslist[0]["book_img"] = NULL;
           return $bookslist;
       }
+      return $bookslist;
   }
 
   //输出数据
   function get_books(int $book_id){
-      return $booksArray;
+      return rakumaBooksList($booksArray);
   }
 
   public function initialize(array $config)
