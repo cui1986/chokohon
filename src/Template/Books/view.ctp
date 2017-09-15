@@ -2,18 +2,16 @@
 
 <div class="book_info">
 <div class="book_info_basic">
-      <div class="divcss6">
-         <img src="detailed_page_2.gif">
-     </div>
-
-     <div class="syomei">書名:</div>
-     <div class="ISBN">ISBN:</div>
-     <div class="ASIN">ASIN:</div>
-     <div class="komento">コメント:</div>
+    <div class="divcss6">
+        <img src="detailed_page_2.gif">
+    </div>
+    <div class="syomei">書名:</div>
+    <div class="ISBN">ISBN:</div>
+    <div class="ASIN">ASIN:</div>
+    <div class="komento">コメント:</div>
 </div>
-    <div class="amazon">
-         <img src="detailed_page_amaazon.gif">
-
+<div class="amazon">
+    <img src="detailed_page_amaazon.gif">
 </div>
 
 
@@ -26,35 +24,34 @@
                 <th>販売/出品</th>
                 <th>購入</th>
             </tr>
-        </thead>
+    	</thead>
 
-    <tbody>
+    	<tbody>
     	<?php
-		for($i=0;$i<sizeof($result);$i++){
-			if($i%2==0){  ?>
-				<tr class="tr-odd">
-			<?php 
-			}
-			foreach($result[$i] as $moo){
-				echo "<td>";
-				echo $moo;
-				echo "</td>";
-			}
-			echo "</tr>";
-		}?>
-			
-
-
-					
-        </tbody>
+			for($i=0;$i<sizeof($result);$i++){
+				if($i%2==0){  ?>
+					<tr class="tr-odd">
+				<?php 
+				}else{
+				?>
+					<tr>
+				<?php 
+				}
+				foreach($result[$i] as $moo){
+					echo "<td>";
+					echo $moo;
+					echo "</td>";
+				}
+				echo "</tr>";
+			}?>
+    	</tbody>
     </table>
 
 </div>
 
 <div class="amazon">
-         <img src="detailed_page_mercari.gif">
+     <img src="detailed_page_mercari.gif">
 </div>
-
 
 
 
