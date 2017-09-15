@@ -105,33 +105,38 @@ class BooksController extends AppController
     return $this->redirect(['action' => 'index']);
 
   }
-  public function view_rakuma($id = null) {
+ public function viewRakuma($id = null) {
 
         $queryData = $this->request->getQuery();
+        $queryData["key_words"] = strip_tags($queryData["key_words"]);
+        $queryData["key_words"] = preg_replace('/\s/', '', $queryData["key_words"]);
+        //尝试过滤关键元素，如果需要，考虑写到MODEL里
         $id = isset($id) ? $id : $id = $queryData["id"];
-        if (!isset($queryData["key_word"]) || $queryData["key_word"] == NULL) {
+        //获取用户提交的值；
+        $rulesTable = TableRegistry::get('RakumaRules');
+        $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
+        //读取数据库里的搜索规则
+        if (!isset($queryData["key_words"]) || $queryData["key_words"] == null) {
             $this->Flash->error(__('検索キーワードを入力してください'));
         }
         if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {
-            $rulesTable = TableRegistry::get('RakumaRules');
-            $rules = $rulesTable->get(["book_id" => $id]);
-
-
+            //存入数据库
             $rules = $rulesTable->patchEntity($rules, $queryData);
 
             if ($rulesTable->save($rules)) {
                 $this->Flash->success(__('検索条件が更新されました'));
             } else {
                 $this->Flash->error(__('システムエラー、保存できません'));
-
             }
-            if ($id) {
-                $rakuma = new RakumaTable;
-                $rakuma = $rakuma->get_books($id);
-            }
-            $this->set(compact('rakuma'));
-            $this->set(compact('id'));
-            $this->set(compact('queryData'));
-
+        }
+        if (isset($id)) {
+            $rakuma = new RakumaTable;
+            $rakuma = $rakuma->get_books($id);
+        }
+        // 将各种值送到前台；
+        $this->set(compact('rules'));
+        $this->set(compact('rakuma'));
+        $this->set(compact('id'));
+        $this->set(compact('queryData'));
     }
 }
