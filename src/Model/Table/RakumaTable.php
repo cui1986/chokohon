@@ -1,4 +1,5 @@
 <?php
+
 //本页全部
 
 namespace App\Model\Table;
@@ -12,20 +13,21 @@ use Cake\ORM\TableRegistry;
 
 class RakumaTable extends Table implements BookInfo {
 
-    private function getRakumaUrl($keyWord = NULL, $categoryId = NULL, $conditionType = NULL, $postageType = NULL, $sellingStatus = NULL) {
-        if ($keyWord == NULL) {
+    private function makeUrl($URI, array $keyWord, array $queryKey) {
+        if ($URI == NULL || $keyWord == NULL) {
             return NULL;
-        } else {
-            $query = "keyword=" . $keyWord;
-
-            $query = ($categoryId == NULL || $categoryId == "") ? $query : $query . "&category_id=" . $categoryId;
-            $query = ($conditionType == NULL || $conditionType == "") ? $query : $query . "&condition_type=" . $conditionType;
-            $query = ($postageType == NULL || $postageType == "") ? $query : $query . "&postage_type=" . $postageType;
-            $query = ($sellingStatus == NULL || $sellingStatus == "") ? $query : $query . "&selling_status=" . $sellingStatus;
-            $resultQuery = "https://api.rakuma.rakuten.co.jp/search-api/rest/product/search?" . $query;
-//            debug("https://rakuma.rakuten.co.jp/search/?" . $query);
-            return $resultQuery;
         }
+        foreach ($keyWord as $key => $value) {
+            $query = "$URI?" . $key . "=" . $value;
+            if ($value == "" || $value == NULL) {
+                return NULL;
+                break;
+            }
+        }
+        foreach ($queryKey as $key => $value) {
+            $query = ($value == NULL || $value == "") ? $query : $query . "&$key=" . $value;
+        }
+        return $query;
     }
 
     private function bookCurl($targetURI) {
@@ -68,43 +70,26 @@ class RakumaTable extends Table implements BookInfo {
 
     function get_books(int $book_id) {
 
-        //BY 周
-        //2017年9月12日14
-
         $rules = TableRegistry::get('RakumaRules');
         $bookRule = $rules->get($book_id);
 
-//        debug($bookRule["key_words"]);
-        //构建网址
-        //https://api.rakuma.rakuten.co.jp/search-api/rest/product/search?keyword=aaa&category_id=39&condition_type=2&postage_type=2&selling_status=0
-        //https://api.rakuma.rakuten.co.jp/search-api/rest/product/search?keyword=aaa&category_id=39&condition_type=2&postage_type=2&selling_status=0
-        //$url = "https://api.rakuma.rakuten.co.jp/search-api/rest/product/search?keyword=JAVA&category_id=39";
-        //$url = "https://api.rakuma.rakuten.co.jp/search-api/rest/product/search?keyword=bbbbbbbbbbbbbbb";
-        //$url = "https://www.yahoo.co.jp";
-        //上面是几个典型例子，对应规则如下：
-        //$url = getRakumaUrl("my%20love", "", "", "", "");
-        //$url = getRakumaUrl("aaa", "39", "2", "2", "0");
-        //$url = getRakumaUrl("JAVA", "39", "", "", "");
 
-        $url = $this->getRakumaUrl($bookRule["key_words"], $bookRule["category_id"], $bookRule["condition_type"], $bookRule["postage_type"], $bookRule["selling_status"]);
-
-        //构建网址
+        $url = $this->makeUrl("https://api.rakuma.rakuten.co.jp/search-api/rest/product/search", ["key_words" => $bookRule['key_words']], ["category_id" => $bookRule['category_id'], "condition_type" => $bookRule['condition_type'], "postage_type" => $bookRule['postage_type'], "selling_status" => $bookRule['selling_status']]);
+//构建网址
 
         $books = $this->bookCurl($url);
-        //获取数据
-
-
+//获取数据
         if ($books == NULL) {
             return NULL;
         }
-        //如果在这里发现为空，立即返回
+//如果在这里发现为空，立即返回
         $booksArray = json_decode($books, true);
 
         $bookslist["count"] = $booksArray["count"];
 
-        //获取数据
+//获取数据
         return $this->rakumaBooksList($booksArray);
-        //最终输出数据
+//最终输出数据
     }
 
     public function initialize(array $config) {
@@ -116,6 +101,13 @@ class RakumaTable extends Table implements BookInfo {
             'foreignKey' => 'id',
             'joinType' => 'INNER'
         ]);
+    }
+
+    public function queryFilter($str) {
+            //尝试过滤关键元素
+        $str = strip_tags($str);
+        $str = trim($str);
+        return $str;
     }
 
 }

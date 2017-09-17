@@ -95,15 +95,17 @@ class BooksController extends AppController {
     }
 
     public function viewRakuma($id = null) {
-        $queryData = $this->request->getQuery();
-        $queryData["key_words"] = strip_tags($queryData["key_words"]);
-        $queryData["key_words"] = preg_replace('/\s/', '', $queryData["key_words"]); //尝试过滤关键元素，如果需要，考虑写到MODEL里
-        $id = isset($id) ? $id : $id = $queryData["id"];     //获取用户提交的值；
+        $rakuma = new RakumaTable;
         $rulesTable = TableRegistry::get('RakumaRules');
-        $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);     //读取数据库里的搜索规则
-        if (!isset($queryData["key_words"]) || $queryData["key_words"] == null) {
+        $queryData = $this->request->getQuery();
+        $id = isset($id) ? $id : $id = $queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
+        $queryData["key_words"] = $rakuma->queryFilter($queryData["key_words"]); //过滤关键词
+        if (!isset($queryData["key_words"]) || $queryData["key_words"] == null||$queryData["key_words"] == "") {
             $this->Flash->error(__('検索キーワードを入力してください'));
         }
+
+
+        $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);     //读取数据库里的搜索规则
         if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {    //存入数据库
             $rules = $rulesTable->patchEntity($rules, $queryData);
             if ($rulesTable->save($rules)) {
@@ -113,7 +115,7 @@ class BooksController extends AppController {
             }
         }
         if (isset($id)) {
-            $rakuma = new RakumaTable;
+
             $rakuma = $rakuma->get_books($id);
         } // 将各种值送到前台；
         $this->set(compact('rules'));
