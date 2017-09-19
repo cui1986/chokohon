@@ -28,7 +28,7 @@
                            $book->id
 
                          ]);
-                         ?>'"
+                         ?>'">
              </td>
 
              <td><input type="button" value="編集" style="background: #96c83d" onclick="location.href='<?php echo $this->Url->build([
@@ -36,7 +36,7 @@
                            "action" => "edit",
  													  $book->id
                          ]);
-                         ?>'"
+                         ?>'">
  						</td>
               <td>
                 <input type="button" value="削除" onclick="location.href='localhost/chukohon/books/delete'">

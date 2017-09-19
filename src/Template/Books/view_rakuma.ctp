@@ -26,7 +26,7 @@
         <?= $this->Form->select('postage_type', ["null" => "すべて", "1" => "着払い(購入者負担)", "2" => "送料込み(出品者負担)", "99" => "手渡し(送料負担なし) "], ['id' => 'postage_type']); ?>
         <?= $this->Form->select('selling_status', ["null" => "すべて", "0" => "販売中", "1" => "売り切れ"], ['id' => 'selling_status']); ?>
         <?= $this->Form->button(__('SEARCH!')) ?>
-        <?= $this->Form->end(); ?>      
+        <?= $this->Form->end(); ?>
     </p>
 
 </div>
@@ -64,4 +64,3 @@
         ?>
     </table>
 </div>
-

@@ -39,8 +39,9 @@ class AmazonTable extends Table implements BookInfo
 		}
 		//会获得比实际多2个
         $page = array_count_values($aaa);
-		//判断是否页面是否大于3张
-		if(!isset($page['ページ '])){
+        //判断$page['ページ ']是否被设置
+		if(isset($page['ページ '])){
+            //判断是否页面是否大于3张
 			if(($page['ページ ']-2)>=3){
 				$print_page=3;
 			}else{
@@ -48,7 +49,7 @@ class AmazonTable extends Table implements BookInfo
 				$print_page=$page['ページ ']-2;
 			}
 		}else{
-			$print_page=$page['ページ ']=1;
+			$print_page=1;
 		}
 
 		//初始化变量
@@ -58,6 +59,8 @@ class AmazonTable extends Table implements BookInfo
 		$a4=0;
 		$url_a=1;
 		$url_b=10;
+        //导入地址
+        $commodity['url']='https://www.amazon.co.jp/gp/offer-listing/'.$books['book_asin'];
 		for($i=0;$i<$print_page;$i++){
 			$es = $html->find('https://www.amazon.co.jp/gp/offer-listing/'.$books['book_asin'].'/ref=olp_page_'.$url_a*$i.'?ie=UTF8&startIndex='.$url_b*$i);
 			//定位到表格位子
@@ -67,7 +70,7 @@ class AmazonTable extends Table implements BookInfo
 			$es = $html->find('div[class="a-column a-span2 olpPriceColumn"]');
 			//获取价格和运费
 			foreach ($es as $value) {
-				$commodity[$a1++]['price']=$value->plaintext;
+				$commodity['data'][$a1++]['price']=$value->plaintext;
 			}
 
 			//定位到商品介绍
@@ -77,24 +80,24 @@ class AmazonTable extends Table implements BookInfo
 				$temporary=$value->plaintext;
 				if(strstr($temporary,"短く表示")){
 					//暂时还没有能力删除掉«，原因还不明
-					$commodity[$a2++]['quality']=strstr($temporary,"短く表示",true);
+					$commodity['data'][$a2++]['quality']=strstr($temporary,"短く表示",true);
 				}else{
 					//没有找到的时候给赋原来的值
-					$commodity[$a2++]['quality']=$value->plaintext;
+					$commodity['data'][$a2++]['quality']=$value->plaintext;
 				}
 			}
 
 			//定位到制造商
 			$es = $html->find('div[class="a-column a-span2 olpSellerColumn"]');
 			foreach ($es as $value) {
-				$commodity[$a3++]['manufacturer']=$value->plaintext;
+				$commodity['data'][$a3++]['manufacturer']=$value->plaintext;
 			}
 
 			//获取制造商信息
 			$es = $html->find('div[class="a-column a-span3 olpDeliveryColumn"]');
 
 			foreach ($es as $value) {
-				$commodity[$a4++]['Distribution']=$value->plaintext;
+				$commodity['data'][$a4++]['Distribution']=$value->plaintext;
 
 			}
 

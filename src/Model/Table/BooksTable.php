@@ -58,6 +58,7 @@ class BooksTable extends Table implements BookInfo
               ->integer('del_flg')
               ->requirePresence('del_flg', 'create')
               ->notEmpty('del_flg');
+              
 
           return $validator;
       }

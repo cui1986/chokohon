@@ -25,9 +25,11 @@ class MerukariTable extends Table implements BookInfo
 
     $book_rules = TableRegistry::get('merukari_rules');
 
-    $rule = $book_rules->find('all', [
-      'conditions' => ['book_id' => $book_id]
-    ])->first();
+    $rule = $book_rules->find('all',
+      [
+        'conditions'=>['book_id' => $book_id]
+      ]
+    )->first();
     $data_array = array();
 
     //取检索条件
@@ -59,9 +61,9 @@ class MerukariTable extends Table implements BookInfo
             $temp_array['book_img'] =  $result->children[0]->children[0]->children[0]->$img_src_name;
             //贩卖情况
             if(isset($result->children[0]->children[0]->children[1]->children[0])){
-              $temp_array['sale_status'] = "売り切れ";
+              $temp_array['sale_status'] = $result->children[0]->children[0]->children[1]->children[0]->plaintext;
             }else {
-              $temp_array['sale_status'] = "販売中";
+              $temp_array['sale_status'] = "";
             }
             //书名
             $temp_array['book_name'] =  $result->children[0]->children[1]->children[0]->plaintext;
