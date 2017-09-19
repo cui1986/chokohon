@@ -60,6 +60,8 @@ class AmazonTable extends Table implements BookInfo
 		$a4=0;
 		$url_a=1;
 		$url_b=10;
+        //导入地址
+        $commodity['url']='https://www.amazon.co.jp/gp/offer-listing/'.$books['book_asin'];
 		for($i=0;$i<$print_page;$i++){
 			$es = $html->find('https://www.amazon.co.jp/gp/offer-listing/'.$books['book_asin'].'/ref=olp_page_'.$url_a*$i.'?ie=UTF8&startIndex='.$url_b*$i);
 			//定位到表格位子
@@ -69,7 +71,7 @@ class AmazonTable extends Table implements BookInfo
 			$es = $html->find('div[class="a-column a-span2 olpPriceColumn"]');
 			//获取价格和运费
 			foreach ($es as $value) {
-				$commodity[$a1++]['price']=$value->plaintext;
+				$commodity['data'][$a1++]['price']=$value->plaintext;
 			}
 
 			//定位到商品介绍
@@ -79,24 +81,24 @@ class AmazonTable extends Table implements BookInfo
 				$temporary=$value->plaintext;
 				if(strstr($temporary,"短く表示")){
 					//暂时还没有能力删除掉«，原因还不明
-					$commodity[$a2++]['quality']=strstr($temporary,"短く表示",true);
+					$commodity['data'][$a2++]['quality']=strstr($temporary,"短く表示",true);
 				}else{
 					//没有找到的时候给赋原来的值
-					$commodity[$a2++]['quality']=$value->plaintext;
+					$commodity['data'][$a2++]['quality']=$value->plaintext;
 				}
 			}
 
 			//定位到制造商
 			$es = $html->find('div[class="a-column a-span2 olpSellerColumn"]');
 			foreach ($es as $value) {
-				$commodity[$a3++]['manufacturer']=$value->plaintext;
+				$commodity['data'][$a3++]['manufacturer']=$value->plaintext;
 			}
 
 			//获取制造商信息
 			$es = $html->find('div[class="a-column a-span3 olpDeliveryColumn"]');
 
 			foreach ($es as $value) {
-				$commodity[$a4++]['Distribution']=$value->plaintext;
+				$commodity['data'][$a4++]['Distribution']=$value->plaintext;
 
 			}
 
