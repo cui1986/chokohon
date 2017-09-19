@@ -57,9 +57,9 @@ class MerukariTable extends Table implements BookInfo
             $temp_array['book_img'] =  $result->children[0]->children[0]->children[0]->$img_src_name;
             //贩卖情况
             if(isset($result->children[0]->children[0]->children[1]->children[0])){
-              $temp_array['sale_status'] = $result->children[0]->children[0]->children[1]->children[0]->plaintext;
+              $temp_array['sale_status'] = "売り切れ";
             }else {
-              $temp_array['sale_status'] = "";
+              $temp_array['sale_status'] = "販売中";
             }
             //书名
             $temp_array['book_name'] =  $result->children[0]->children[1]->children[0]->plaintext;

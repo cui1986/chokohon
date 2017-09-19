@@ -14,7 +14,7 @@ class AmazonTable extends Table implements BookInfo
 	public function get_books(int $book_id){
 
 		//暂时用自己的数据库
-		$book_model = TableRegistry::get('mytable');
+		$book_model = TableRegistry::get('books');
 
     	$books = $book_model->get($book_id);
 
@@ -24,7 +24,7 @@ class AmazonTable extends Table implements BookInfo
 		if(!isset($book_id)){
 			return  "url有误";
 		}
-		$html->load_file('https://www.amazon.co.jp/gp/offer-listing/'.$books['bookss_id']);
+		$html->load_file('https://www.amazon.co.jp/gp/offer-listing/'.$books['book_asin']);
 		// $commodity = array(
 		// 	array(
 		// 		'price'        =>  array(),
@@ -62,7 +62,7 @@ class AmazonTable extends Table implements BookInfo
 		$url_a=1;
 		$url_b=10;
 		for($i=0;$i<$print_page;$i++){
-			$es = $html->find('https://www.amazon.co.jp/gp/offer-listing/'.$books['bookss_id'].'/ref=olp_page_'.$url_a*$i.'?ie=UTF8&startIndex='.$url_b*$i);
+			$es = $html->find('https://www.amazon.co.jp/gp/offer-listing/'.$books['book_asin'].'/ref=olp_page_'.$url_a*$i.'?ie=UTF8&startIndex='.$url_b*$i);
 			//定位到表格位子
 			// $es = $html->find('div[class="a-row a-spacing-mini olpOffer"]');
 

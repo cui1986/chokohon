@@ -3,13 +3,13 @@ body{
   font-size: 18px;
 }
 .book_book_form_box{
-    margin: 0 auto
+    margin: 0 auto;
     width: 374px;
     border-style: solid;
     border-color: #eaeaea;
     border-width: 4px;
-    padding: 0px 20px 27px 26px;
     padding: 0px 20px 70px 26px;
+    padding: 0px 20px 27px 26px;
     color: #292828;
     font-size: 18px;
     margin-top: 60px;
@@ -26,7 +26,7 @@ body{
     display: inline-block;
     background-color: white;
     position: relative;
-    left: 97px;
+    left: 120px;;
     top: -10px;
     text-align: center;
     font-size: 23px;
@@ -190,8 +190,20 @@ div.books-index table tbody{
   background-color: #e2efda;
 }
 
-div.books-index table tbody tr td button{
+div.books-index table tbody tr td input{
   background: #96c83d;
+  width: 70px;
+  height: 30px;
+}
+
+.book_input_style>textarea{
+    display: Inline;
+    float: right;
+    width: 210px;
+    height: 32px;
+    font-size: 20px;
+    margin: 9px 0px 0px 0px;
+    padding-left: 6px;
 }
 
 
@@ -257,6 +269,32 @@ float: left;
     margin: 12px;
     height: 31px;
 }
+.fril_area{
+    border-style: solid;
+    border-bottom-width: medium;
+    border-color: green;
+    padding: 26px;
+    margin-top: 30px;
+    margin-bottom: 26px;
+}
+.fril_area input{
+    width: 259px;
+    margin: 12px;
+    height: 31px;
+}
+.rakuma_area{
+    border-style: solid;
+    border-bottom-width: medium;
+    border-color: green;
+    padding: 26px;
+    margin-top: 30px;
+    margin-bottom: 26px;
+}
+.rakuma_area input{
+    width: 259px;
+    margin: 12px;
+    height: 31px;
+}
 
 #qqq{
   margin-left: 30px;
@@ -273,4 +311,7 @@ float: left;
   margin-left: -626px;
 }
 
-
+.books-index img{
+  width: 100px;
+  height:100px;
+}

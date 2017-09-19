@@ -26,7 +26,59 @@ class BooksController extends AppController
 
   public function view($id = null)
   {
+    $this->loadModel("Books");
+    $book = $this->Books->get($id);
+    /* amazon start */
+    $amazon_model = $this->LoadModel("Amazon");
+    $result = $amazon_model->get_books(1);
+    /* amazon end */
 
+    /* merukari start*/
+    $searchmerukariform = new SearchMerukariForm();
+
+    $book_rules = TableRegistry::get('merukari_rules');
+
+    $rule = $book_rules->get(['book_id' => $id]);
+
+    if($this->request->is('get') && (($this->request->getQuery('form_name')) == 'searchform_name')){
+
+        $rule['key_words'] = $this->request->getQuery('key_words');
+        $rule['category_id'] = $this->request->getQuery('category_id');
+        $rule['book_status'] = $this->request->getQuery('book_status');
+        $rule['delivery_id'] = $this->request->getQuery('delivery_id');
+
+
+        if ($this->request->getQuery('sale_status') == 1) {
+            $rule['on_sale'] = 1;
+            $rule['sold_out'] = '';
+        }elseif ($this->request->getQuery('sale_status') == 2){
+            $rule['on_sale'] = '';
+            $rule['sold_out'] = 1;
+        }else {
+            $rule['on_sale'] = 1;
+            $rule['sold_out'] = 1;
+        }
+        $rule['sale_status'] = $this->request->getQuery('sale_status');
+        $book_rules->save($rule);
+    }
+
+    $this->request->data('key_words',$rule["key_words"]);
+    $this->request->data('category_id',$rule["category_id"]);
+    $this->request->data('book_status',$rule["book_status"]);
+    $this->request->data('delivery_id',$rule["delivery_id"]);
+    $this->request->data('sale_status',$rule["sale_status"]);
+
+    $this->loadModel('Merukari');
+    $merukari = new MerukariTable();
+    $merukari = $merukari->get_books($id);
+    
+    /* merukari end */
+
+
+    $this->set(compact('book'));
+    $this->set(compact('merukari'));
+    $this->set(compact('searchmerukariform'));
+    $this->set(compact('result'));
 
   }
 
@@ -51,7 +103,7 @@ class BooksController extends AppController
         $merukari->key_words = $this->request->getData("book_name");
         $rakuma->key_words = $this->request->getData("book_name");
 
-
+        $book->del_flg = 0;
         $book->furiru = $furiru;
         $book->merukari = $merukari;
         $book->rakuma = $rakuma;
@@ -71,25 +123,65 @@ class BooksController extends AppController
 
 
   public function edit($id = null)
-  {
-    $book = $this->Books->get($id, [
-        'contain' => [ ]
-    ]);
+    {
 
-    if ($this->request->is(['post','put','patch'])) {
-        $book = $this->Books->patchEntity($book, $this->request->getData());
+      $this->loadModel('Books');
+      $this->loadModel('Furiru');
+      $this->loadModel('Merukari');
+      $this->loadModel('Rakuma');
 
-        if ($this->Books->save($book)) {
+      //1.先把一本books的所有数据取到
+      $book = $this->Books->get($id, [
+          'contain' => ['Furiru','Merukari','Rakuma']
+      ]);
+
+
+      //2.如果是post形式
+      if ($this->request->is('post')) {
+
+
+           //如果请求中的bookname等于存在数据库中的bookname，则直接将数据只存在books一张table里
+          if(($this->request->getData("book_name")) && ($this->request->getData("book_name") == $book->book_name) ){
+            $book = $this->Books->patchEntity($book, $this->request->getData());
+            $this->Books->save($book);
+
             $this->Flash->success(__('編集は成功しました.'));
-
             return $this->redirect(['action' => 'index']);
-        }
-        $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
-    }
-    $this->set(compact('book'));
-    $this->set('_serialize', ['book']);
 
-  }
+            //如果请求中的bookname等于存在数据库中的bookname，则直接将数据只存在books一张table里
+           } else {
+             //如果请求中的bookname跟存在数据中的bookname不相同
+             //请求中的bookname的值等于keyword
+
+             $book = $this->Books->patchEntity($book, $this->request->getData());
+
+              // $book->furiru->key_words = $this->request->getData("book_name");
+              $book->merukari->key_words = $this->request->getData("book_name");
+              // $book->rakuma->key_words = $this->request->getData("book_name");
+
+              $book->book_name = $this->request->getData("book_name");
+
+
+              $this->Books->save($book);
+              $this->Merukari->save($book->merukari);
+              // $this->Rakuma->save($book->rakuma);
+              // $this->Furiru->save($book->furiru);
+
+
+
+              $this->Flash->success(__('編集は成功しました.'));
+
+              return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
+      }
+
+
+      $this->set(compact('book'));
+      $this->set('_serialize', ['book']);
+
+    }
 
 
   public function delete($id = null)
@@ -105,33 +197,5 @@ class BooksController extends AppController
     return $this->redirect(['action' => 'index']);
 
   }
-  public function view_rakuma($id = null) {
 
-        $queryData = $this->request->getQuery();
-        $id = isset($id) ? $id : $id = $queryData["id"];
-        if (!isset($queryData["key_word"]) || $queryData["key_word"] == NULL) {
-            $this->Flash->error(__('検索キーワードを入力してください'));
-        }
-        if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {
-            $rulesTable = TableRegistry::get('RakumaRules');
-            $rules = $rulesTable->get(["book_id" => $id]);
-
-
-            $rules = $rulesTable->patchEntity($rules, $queryData);
-
-            if ($rulesTable->save($rules)) {
-                $this->Flash->success(__('検索条件が更新されました'));
-            } else {
-                $this->Flash->error(__('システムエラー、保存できません'));
-
-            }
-            if ($id) {
-                $rakuma = new RakumaTable;
-                $rakuma = $rakuma->get_books($id);
-            }
-            $this->set(compact('rakuma'));
-            $this->set(compact('id'));
-            $this->set(compact('queryData'));
-
-    }
 }
