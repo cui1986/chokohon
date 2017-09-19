@@ -310,3 +310,9 @@ float: left;
   width: 100px;
   height:100px;
 }
+
+#rakuma_rules input#key_words {
+    width: 103px;
+    margin: auto;
+    height: auto;
+}

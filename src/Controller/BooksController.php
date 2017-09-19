@@ -75,38 +75,42 @@ class BooksController extends AppController
       $merukari = $merukari->get_books($id);
 
       /* merukari end */
+      /* rakuma start */
+      $rakuma = new RakumaTable;
+              $rulesTable = TableRegistry::get('RakumaRules');
+              $queryData = $this->request->getQuery();
+              $id = isset($id) ? $id : $id = $queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
 
-      // /* rakuma start */
-      //
-      // $rakuma = new RakumaTable;
-      // $rulesTable = TableRegistry::get('RakumaRules');
-      // $queryData = $this->request->getQuery();
-      // $id = isset($id) ? $id : $id = $queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
-      // $queryData["key_words"] = $rakuma->queryFilter($queryData["key_words"]); //过滤关键词
-      // if (!isset($queryData["key_words"]) || $queryData["key_words"] == null||$queryData["key_words"] == "") {
-      //     $this->Flash->error(__('検索キーワードを入力してください'));
-      // }
-      //
-      //
-      // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);     //读取数据库里的搜索规则
-      // if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {    //存入数据库
-      //     $rules = $rulesTable->patchEntity($rules, $queryData);
-      //     if ($rulesTable->save($rules)) {
-      //         $this->Flash->success(__('検索条件が更新されました'));
-      //     } else {
-      //         $this->Flash->error(__('システムエラー、保存できません'));
-      //     }
-      // }
-      // if (isset($id)) {
-      //
-      //     $rakuma = $rakuma->get_books($id);
-      // }
-      // /* rakuma end */
-      //
-      // $this->set(compact('rules'));
-      // $this->set(compact('rakuma'));
-      // $this->set(compact('id'));
-      // $this->set(compact('queryData'));
+              if (!isset($queryData["key_words"]) || $queryData["key_words"] == null||$queryData["key_words"] == "") {
+                  $this->Flash->error(__('検索キーワードを入力してください'));
+              } else {
+                  $queryData["key_words"] = $rakuma->queryFilter($queryData["key_words"]); //过滤关键词
+              }
+
+              // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
+              //读取数据库里的搜索规则
+              $rules = $rulesTable->find('all', [
+                'conditions' => ['book_id' => $id,["del_flg" => "0"]],
+              ])->first();
+              if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rakuma_rules_form") {    //存入数据库
+                  $rules = $rulesTable->patchEntity($rules, $queryData);
+                  if ($rulesTable->save($rules)) {
+                      $this->Flash->success(__('検索条件が更新されました'));
+                  } else {
+                      $this->Flash->error(__('システムエラー、保存できません'));
+                  }
+              }
+              if (isset($id)) {
+
+                  $rakuma = $rakuma->get_books($id);
+              } // 将各种值送到前台；
+
+
+          /* rakuma end */
+      $this->set(compact('rules'));
+      $this->set(compact('rakuma'));
+      $this->set(compact('id'));
+      $this->set(compact('queryData'));
       $this->set(compact('book'));
       $this->set(compact('merukari'));
       $this->set(compact('searchmerukariform'));
@@ -204,65 +208,6 @@ class BooksController extends AppController
    }
 
 
-  public function view($id = null)
-  {
-    $this->loadModel("Books");
-    $amazon_model = $this->LoadModel("Amazon");
-
-    $result = $amazon_model->get_books($id);
-    $book = $this->Books->get($id);
-
-
-    $searchmerukariform = new SearchMerukariForm();
-
-    $book_rules = TableRegistry::get('merukari_rules');
-
-    $rule = $book_rules->find('all',
-    [
-      'conditions'=>['book_id' => $id]
-    ])->first();
-
-
-    if($this->request->is('get') && (($this->request->getQuery('form_name')) == 'searchform_name')){
-
-        $rule['key_words'] = $this->request->getQuery('key_words');
-        $rule['category_id'] = $this->request->getQuery('category_id');
-        $rule['book_status'] = $this->request->getQuery('book_status');
-        $rule['delivery_id'] = $this->request->getQuery('delivery_id');
-
-
-        if ($this->request->getQuery('sale_status') == 1) {
-            $rule['on_sale'] = 1;
-            $rule['sold_out'] = '';
-        }elseif ($this->request->getQuery('sale_status') == 2){
-            $rule['on_sale'] = '';
-            $rule['sold_out'] = 1;
-        }else {
-            $rule['on_sale'] = 1;
-            $rule['sold_out'] = 1;
-        }
-        $rule['sale_status'] = $this->request->getQuery('sale_status');
-        var_dump($rule);
-        $book_rules->save($rule);
-    }
-
-    $this->request->data('key_words',$rule["key_words"]);
-    $this->request->data('category_id',$rule["category_id"]);
-    $this->request->data('book_status',$rule["book_status"]);
-    $this->request->data('delivery_id',$rule["delivery_id"]);
-    $this->request->data('sale_status',$rule["sale_status"]);
-
-    $this->loadModel('Merukari');
-    $merukari = new MerukariTable();
-    $merukari = $merukari->get_books($id);
-
-    $this->set(compact('merukari'));
-    $this->set(compact('searchmerukariform'));
-    $this->set(compact('result'));
-    $this->set(compact('book'));
-
-  }
-
     public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
         $book = $this->Books->get($id);
@@ -273,35 +218,5 @@ class BooksController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
-    }
-
-
-    public function viewRakuma($id = null) {
-        $rakuma = new RakumaTable;
-        $rulesTable = TableRegistry::get('RakumaRules');
-        $queryData = $this->request->getQuery();
-        $id = isset($id) ? $id : $id = $queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
-        $queryData["key_words"] = $rakuma->queryFilter($queryData["key_words"]); //过滤关键词
-        if (!isset($queryData["key_words"]) || $queryData["key_words"] == null||$queryData["key_words"] == "") {
-            $this->Flash->error(__('検索キーワードを入力してください'));
-        }
-
-        $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);     //读取数据库里的搜索规则
-        if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {    //存入数据库
-            $rules = $rulesTable->patchEntity($rules, $queryData);
-            if ($rulesTable->save($rules)) {
-                $this->Flash->success(__('検索条件が更新されました'));
-            } else {
-                $this->Flash->error(__('システムエラー、保存できません'));
-            }
-        }
-        if (isset($id)) {
-
-            $rakuma = $rakuma->get_books($id);
-        } // 将各种值送到前台；
-        $this->set(compact('rules'));
-        $this->set(compact('rakuma'));
-        $this->set(compact('id'));
-        $this->set(compact('queryData'));
     }
 }

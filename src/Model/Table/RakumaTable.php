@@ -27,7 +27,10 @@ class RakumaTable extends Table implements BookInfo {
         foreach ($queryKey as $key => $value) {
             $query = ($value == NULL || $value == "") ? $query : $query . "&$key=" . $value;
         }
+//        $test_rul="https://rakuma.rakuten.co.jp/search/?keyword=".$query;
+//        var_dump($query);
         return $query;
+        
     }
 
     private function bookCurl($targetURI) {
@@ -71,13 +74,15 @@ class RakumaTable extends Table implements BookInfo {
     function get_books(int $book_id) {
 
         $rules = TableRegistry::get('RakumaRules');
-        $bookRule = $rules->get($book_id);
+        $bookRule = $rules->find('all')->where(['book_id' => $book_id])->first();
 
 
-        $url = $this->makeUrl("https://api.rakuma.rakuten.co.jp/search-api/rest/product/search", ["key_words" => $bookRule['key_words']], ["category_id" => $bookRule['category_id'], "condition_type" => $bookRule['condition_type'], "postage_type" => $bookRule['postage_type'], "selling_status" => $bookRule['selling_status']]);
+        $url = $this->makeUrl("https://api.rakuma.rakuten.co.jp/search-api/rest/product/search", ["key_words" => $bookRule['key_words']], ["keyword" => $bookRule['key_words']], ["category_id" => $bookRule['category_id'], "condition_type" => $bookRule['condition_type'], "postage_type" => $bookRule['postage_type'], "selling_status" => $bookRule['selling_status']]);
 //构建网址
-
+//        var_dump($url);
+        
         $books = $this->bookCurl($url);
+//        var_dump($books);
 //获取数据
         if ($books == NULL) {
             return NULL;
