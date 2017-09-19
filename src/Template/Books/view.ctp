@@ -16,7 +16,7 @@
 
 
 <div class="border books-index">
-<a href=<?php echo $result['url'] ?>>購入ページへ</a> 
+<a href=<?php echo $result['url'] ?>　target="_blank">購入ページへ</a> 
     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="100"  style="border-color: #70ad47">
         <thead>
             <tr>
