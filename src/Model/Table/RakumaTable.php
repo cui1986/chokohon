@@ -102,17 +102,10 @@ class RakumaTable extends Table implements BookInfo {
             'joinType' => 'INNER'
         ]);
     }
-    public function get_books(int $book_id){
-
-    }
-
     public function queryFilter($str) {
         //尝试过滤关键元素
         $str = strip_tags($str);
         $str = trim($str);
         return $str;
     }
-
 }
-
-?>

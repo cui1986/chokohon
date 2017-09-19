@@ -42,7 +42,7 @@ class AmazonTable extends Table implements BookInfo
 		//会获得比实际多2个
         $page = array_count_values($aaa);
 		//判断是否页面是否大于3张
-		if(!isset($page['ページ '])){
+		if(isset($page['ページ '])){
 			if(($page['ページ ']-2)>=3){
 				$print_page=3;
 			}else{
@@ -50,7 +50,7 @@ class AmazonTable extends Table implements BookInfo
 				$print_page=$page['ページ ']-2;
 			}
 		}else{
-			$print_page=$page['ページ ']=1;
+			$print_page=1;
 		}
 
 		//初始化变量

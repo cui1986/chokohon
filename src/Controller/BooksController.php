@@ -118,16 +118,22 @@ class BooksController extends AppController
 
   public function view($id = null)
   {
-
-
+    $this->loadModel("Books");
     $amazon_model = $this->LoadModel("Amazon");
+
     $result = $amazon_model->get_books($id);
+    $book = $this->Books->get($id);
+
 
     $searchmerukariform = new SearchMerukariForm();
 
     $book_rules = TableRegistry::get('merukari_rules');
 
-    $rule = $book_rules->get(['book_id' => $id]);
+    $rule = $book_rules->find('all',
+    [
+      'conditions'=>['book_id' => $id]
+    ])->first();
+
 
     if($this->request->is('get') && (($this->request->getQuery('form_name')) == 'searchform_name')){
 
@@ -148,6 +154,7 @@ class BooksController extends AppController
             $rule['sold_out'] = 1;
         }
         $rule['sale_status'] = $this->request->getQuery('sale_status');
+        var_dump($rule);
         $book_rules->save($rule);
     }
 
@@ -164,69 +171,7 @@ class BooksController extends AppController
     $this->set(compact('merukari'));
     $this->set(compact('searchmerukariform'));
     $this->set(compact('result'));
-
-  }
-
-
-
-  public function edit($id = null)
-  {
-
-    $this->loadModel('Books');
-    $this->loadModel('Furiru');
-    $this->loadModel('Merukari');
-    $this->loadModel('Rakuma');
-
-    //1.先把一本books的所有数据取到
-    $book = $this->Books->get($id, [
-        'contain' => ['Furiru','Merukari','Rakuma']
-    ]);
-
-
-    //2.如果是post形式
-    if ($this->request->is('post')) {
-
-
-         //如果请求中的bookname等于存在数据库中的bookname，则直接将数据只存在books一张table里
-        if(($this->request->getData("book_name")) && ($this->request->getData("book_name") == $book->book_name) ){
-          $book = $this->Books->patchEntity($book, $this->request->getData());
-          $this->Books->save($book);
-
-          $this->Flash->success(__('編集は成功しました.'));
-          return $this->redirect(['action' => 'index']);
-
-          //如果请求中的bookname等于存在数据库中的bookname，则直接将数据只存在books一张table里
-         } else {
-           //如果请求中的bookname跟存在数据中的bookname不相同
-           //请求中的bookname的值等于keyword
-
-            $book = $this->Books->patchEntity($book, $this->request->getData());
-
-            $book->furiru->key_words = $this->request->getData("book_name");
-            $book->merukari->key_words = $this->request->getData("book_name");
-            $book->rakuma->key_words = $this->request->getData("book_name");
-
-            $book->book_name = $this->request->getData("book_name");
-
-
-            $this->Books->save($book);
-            $this->Merukari->save($book->merukari);
-            $this->Rakuma->save($book->rakuma);
-            $this->Furiru->save($book->furiru);
-
-
-
-            $this->Flash->success(__('編集は成功しました.'));
-
-            return $this->redirect(['action' => 'index']);
-          }
-
-          $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
-    }
-
-
     $this->set(compact('book'));
-    $this->set('_serialize', ['book']);
 
   }
 
