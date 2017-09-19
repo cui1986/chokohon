@@ -230,7 +230,11 @@ return [
              */
             //'port' => 'non_standard_port_number',
             'username' => 'root',
+<<<<<<< HEAD
+            'password' => '123456',
+=======
             'password' => '',
+>>>>>>> fd1ce274aa90490c4d066a8a706b5cfc2d538f74
             'database' => 'book_kagaku',
             'encoding' => 'utf8',
             'timezone' => 'UTC',

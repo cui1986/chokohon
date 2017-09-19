@@ -6,7 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
-use Cake\ORM\TableRegistry;
+
 
 class FuriruTable extends Table implements BookInfo
 {

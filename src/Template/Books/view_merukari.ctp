@@ -35,7 +35,7 @@
       ?>
         <tr>
             <td><?php echo $value["price"] ?></td>
-            <td>< img src="<?php echo $value["book_img"] ?>"></td>
+            <td><img src="<?php echo $value["book_img"] ?>"></td>
             <td><?php echo $value["sale_status"] ?></td>
             <td><?php echo $value["book_name"] ?></td>
             <td><button onClick="location.href='<?php echo $value["buy_link"] ?>'">購入</button></td>
