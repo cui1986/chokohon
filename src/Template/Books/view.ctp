@@ -16,13 +16,14 @@
 
 
 <div class="border books-index">
+<a href=<?php echo $result['url'] ?>>購入ページへ</a>
     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="100"  style="border-color: #70ad47">
         <thead>
             <tr>
                 <th>配送料/価格</th>
                 <th>コンディション</th>
                 <th>販売/出品</th>
-                <th>購入</th>
+                <th>配送</th>
             </tr>
     	</thead>
 
@@ -37,7 +38,7 @@
 					<tr>
 				<?php
 				}
-				foreach($result[$i] as $moo){
+				foreach($result['data'][$i] as $moo){
 					echo "<td>";
 					echo $moo;
 					echo "</td>";
@@ -251,7 +252,6 @@
 <div class="rakuma_area">
 	<div class="rakuma_rules">
 		<!-- <span>キーワードを追加する</span>
->>>>>>> bb9596c630e8a87ad20f39ef9b0a6285adcdd878
 		<input type="input" name="keyword"><button type="button">検索</button>
 		<div>
 		<select>
@@ -268,13 +268,6 @@
 	<select id="qqq" >
 			<option value="bbbb">販売状況</option>
 		</select>
-
-<<<<<<< HEAD
-
-
-
-		</div>
-=======
  -->
  <p>
      <?= $this->Form->create(null, ['type' => 'get']); ?>
