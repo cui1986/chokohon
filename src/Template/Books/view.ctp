@@ -16,6 +16,7 @@
 
 
 <div class="border books-index">
+<a href=<?php echo $result['url'] ?>>購入ページへ</a> 
     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="100"  style="border-color: #70ad47">
         <thead>
             <tr>
@@ -37,7 +38,7 @@
 					<tr>
 				<?php
 				}
-				foreach($result[$i] as $moo){
+				foreach($result['data'][$i] as $moo){
 					echo "<td>";
 					echo $moo;
 					echo "</td>";
