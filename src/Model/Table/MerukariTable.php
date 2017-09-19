@@ -25,7 +25,9 @@ class MerukariTable extends Table implements BookInfo
 
     $book_rules = TableRegistry::get('merukari_rules');
 
-    $rule = $book_rules->get(['book_id' => $book_id]);
+    $rule = $book_rules->find('all', [
+      'conditions' => ['book_id' => $book_id]
+    ])->first();
     $data_array = array();
 
     //取检索条件
@@ -37,7 +39,7 @@ class MerukariTable extends Table implements BookInfo
     $sold_out = $rule["sold_out"];
 
     //解析url
-    $url =  "https://www.mercari.com/jp/search/?sort_order=&keyword={$key_words}&category_root=5&category_child=72&category_grand_child[{$category_id}]=1&brand_name=&brand_id=&size_group=&price_min=&price_max=&item_condition_id[{$book_status}]=1&shipping_payer_id[{$delivery_id}]=1&status_on_sale={$on_sale}&status_trading_sold_out={$sold_out}";
+    $url =  "https://www.mercari.com/jp/search/?sort_order=&keyword={$key_words}" . "&category_root=5&category_child=72&category_grand_child[{$category_id}]=1" . "&brand_name=&brand_id=&size_group=&price_min=&price_max=&item_condition_id[{$book_status}]=1" . "&shipping_payer_id[{$delivery_id}]=1" . "&status_on_sale={$on_sale}" . "&status_trading_sold_out={$sold_out}";
 
     $html = file_get_html($url);
 

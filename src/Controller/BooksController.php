@@ -27,8 +27,8 @@ class BooksController extends AppController {
       $this->loadModel("Books");
       $book = $this->Books->get($id);
       /* amazon start */
-      $amazon_model = $this->LoadModel("Amazon");
-      $result = $amazon_model->get_books(1);
+      $amazon_model =$this->LoadModel("Amazon");
+      $result = $amazon_model->get_books($id);
       /* amazon end */
 
       /* merukari start*/
@@ -36,7 +36,9 @@ class BooksController extends AppController {
 
       $book_rules = TableRegistry::get('merukari_rules');
 
-      $rule = $book_rules->get(['book_id' => $id]);
+      $rule = $book_rules->find('all', [
+        'conditions' => ['book_id' => $id]
+      ])->first();
 
       if($this->request->is('get') && (($this->request->getQuery('form_name')) == 'searchform_name')){
 
@@ -46,10 +48,10 @@ class BooksController extends AppController {
           $rule['delivery_id'] = $this->request->getQuery('delivery_id');
 
 
-          if ($this->request->getQuery('sale_status') == 1) {
+          if ($this->request->getQuery('sale_status') == '販売中') {
               $rule['on_sale'] = 1;
               $rule['sold_out'] = '';
-          }elseif ($this->request->getQuery('sale_status') == 2){
+          }elseif ($this->request->getQuery('sale_status') == '売り切れ'){
               $rule['on_sale'] = '';
               $rule['sold_out'] = 1;
           }else {
@@ -72,7 +74,37 @@ class BooksController extends AppController {
 
       /* merukari end */
 
-
+      // /* rakuma start */
+      //
+      // $rakuma = new RakumaTable;
+      // $rulesTable = TableRegistry::get('RakumaRules');
+      // $queryData = $this->request->getQuery();
+      // $id = isset($id) ? $id : $id = $queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
+      // $queryData["key_words"] = $rakuma->queryFilter($queryData["key_words"]); //过滤关键词
+      // if (!isset($queryData["key_words"]) || $queryData["key_words"] == null||$queryData["key_words"] == "") {
+      //     $this->Flash->error(__('検索キーワードを入力してください'));
+      // }
+      //
+      //
+      // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);     //读取数据库里的搜索规则
+      // if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rules_form") {    //存入数据库
+      //     $rules = $rulesTable->patchEntity($rules, $queryData);
+      //     if ($rulesTable->save($rules)) {
+      //         $this->Flash->success(__('検索条件が更新されました'));
+      //     } else {
+      //         $this->Flash->error(__('システムエラー、保存できません'));
+      //     }
+      // }
+      // if (isset($id)) {
+      //
+      //     $rakuma = $rakuma->get_books($id);
+      // }
+      // /* rakuma end */
+      //
+      // $this->set(compact('rules'));
+      // $this->set(compact('rakuma'));
+      // $this->set(compact('id'));
+      // $this->set(compact('queryData'));
       $this->set(compact('book'));
       $this->set(compact('merukari'));
       $this->set(compact('searchmerukariform'));
@@ -117,7 +149,7 @@ class BooksController extends AppController {
     }
 
 
-  public function edit($id = null)
+    public function edit($id = null)
     {
 
       $this->loadModel('Books');

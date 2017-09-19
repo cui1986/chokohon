@@ -13,10 +13,9 @@ class AmazonTable extends Table implements BookInfo
 
 	public function get_books(int $book_id){
 
-		//暂时用自己的数据库
 		$book_model = TableRegistry::get('books');
 
-    	$books = $book_model->get($book_id);
+    $books = $book_model->get($book_id);
 
 
 
@@ -37,7 +36,6 @@ class AmazonTable extends Table implements BookInfo
 		$aaa=array();
 		foreach ($es as $value) {
 			$aaa[]=$value->plaintext;
-
 		}
 		//会获得比实际多2个
         $page = array_count_values($aaa);

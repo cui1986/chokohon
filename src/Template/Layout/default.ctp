@@ -27,7 +27,10 @@
         <div>
             <h4>
                 <font>
-									<button type="button">図書新規</button>
+									<button type="button" onclick="location.href='<?php echo $this->Url->build([
+                                "controller" => "books",
+                                "action" => "add"
+                              ]);?>'">図書新規</button>
 								</font>
             </h4>
         </div>
