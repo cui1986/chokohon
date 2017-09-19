@@ -116,10 +116,6 @@ class BooksController extends AppController {
         $this->set('_serialize', ['book']);
     }
 
-    public function edit($id = null) {
-        $book = $this->Books->get($id, [
-            'contain' => []
-        ]);
 
   public function edit($id = null)
     {
