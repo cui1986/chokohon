@@ -7,14 +7,13 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use App\Model\Interfaces\BookInfo;
+use Cake\ORM\TableRegistry;
 
 
-class RakumaTable extends Table implements BookInfo
-{
 
-    function get_books(int $book_id) {
+class RakumaTable extends Table implements BookInfo {
 
-    }
+
 
     public function initialize(array $config) {
 
@@ -26,7 +25,9 @@ class RakumaTable extends Table implements BookInfo
             'joinType' => 'INNER'
         ]);
     }
+    public function get_books(int $book_id){
 
+    }
 
 }
 

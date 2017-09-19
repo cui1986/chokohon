@@ -25,6 +25,8 @@
              <td><input type="button" value="详细" style="background: #96c83d" onclick="location.href='<?php echo $this->Url->build([
                            "controller" => "books",
                            "action" => "view",
+                           $book->id
+
                          ]);
                          ?>'"
              </td>
@@ -32,7 +34,7 @@
              <td><input type="button" value="編集" style="background: #96c83d" onclick="location.href='<?php echo $this->Url->build([
                            "controller" => "books",
                            "action" => "edit",
- 													 $book->id
+ 													  $book->id
                          ]);
                          ?>'"
  						</td>

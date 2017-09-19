@@ -3,6 +3,7 @@
    <span class="book_sub_title_text">配本 </span>
    <div class="book_book_add_form">
       <div class="book_form_login">
+
             <?= $this->Form->create($book, [
               'type'=>'post',
               'url'=> [
@@ -10,7 +11,6 @@
                 "action" => "add"
               ]
             ]);?>
-            <fieldset>
               <label class="book_input_style">
                   <span class="book_hint"><?= $this->Paginator->sort('ASINコード') ?>:</span>
                   <?php
@@ -44,9 +44,10 @@
               <label class="book_input_style">
                   <span class="book_hint"><?= $this->Paginator->sort('書名') ?>:</span>
                     <?php
-                        echo $this->Form->control(
+                        echo $this->Form->text(
                              'book_name',
                       [
+
                              'templates' => [
                              'inputContainer' => '{{content}}'
                              ],
@@ -59,7 +60,7 @@
                 <label class="book_input_style">
                     <span class="book_hint"><?= $this->Paginator->sort('コメント') ?>:</span>
                        <?php
-                          echo $this->Form->control(
+                          echo $this->Form->text(
                                'book_comment',
                          [
                                 'templates' => [
@@ -71,7 +72,7 @@
                           );
                        ?>
                 </label>
-              </fieldset>
+
                 <label class="book_submit">
                         <?php
                            echo $this->Form->control(
