@@ -60,6 +60,7 @@
           <?php if ($this->request->action == "index"){  ?> <h1>図書一覧</h1><?php }?>
           <?php if ($this->request->action == "add"){  ?> <h1>図書新規</h1><?php }?>
           <?php if ($this->request->action == "edit"){  ?> <h1>図書編集</h1><?php }?>
+          <?php if ($this->request->action == "view"){  ?> <h1>図書详细</h1><?php }?>
          </div>
      </div>
 
