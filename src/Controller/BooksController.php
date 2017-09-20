@@ -91,7 +91,6 @@ class BooksController extends AppController
       } else {
           $rakuma_queryData["key_words"] = $rakuma->queryFilter($rakuma_queryData["key_words"]); //过滤关键词
       }
-
       // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
       //读取数据库里的搜索规则
       $rakuma_rule = $rakuma_rules->find('all', [
@@ -249,6 +248,7 @@ class BooksController extends AppController
 
       $this->set(compact('book'));
       $this->set('_serialize', ['book']);
+
 }
 
 
@@ -280,7 +280,5 @@ class BooksController extends AppController
         } else {
             $this->Flash->error(__('削除は失敗しました、もう一度試してください.'));
         }
-
-        return $this->redirect(['action' => 'index']);
     }
 }
