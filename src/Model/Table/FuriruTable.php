@@ -44,7 +44,7 @@ class FuriruTable extends Table implements BookInfo
       $transaction = $books["transaction"];
 
       $url = "https://fril.jp/s?query=".$key_words."&"."category_id=".$category_id.'&'."status=".$book_status."&transaction=".$transaction.'&'."carriage=".$delivery_id;
-      // var_dump($url);
+      var_dump($url);
       $data_array = array();
       if($this->chkurl($url)==false){
         return $data_array;
@@ -71,13 +71,17 @@ class FuriruTable extends Table implements BookInfo
             $temp_array['book_status'] = "";
           }
           $temp_array['book_price'] = $result->children[0]->children[1]->children[2]->children[0]->children[1]->plaintext;
+          if(isset($result->children[0]->children[0]->children[0]->children[2])){
           $temp_array['transaction'] =  $result->children[0]->children[0]->children[0]->children[2]->plaintext;
+          } else  {
+            $temp_array['transaction'] =  $result->children[0]->children[0]->children[0]->children[1]->plaintext;
+          }
           $data_array[] = $temp_array;
         }
 
         $html->clear();
         return $data_array;
-    }
+      }
   }
     function chkurl($url){
     $handle = curl_init($url);
