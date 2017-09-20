@@ -37,14 +37,14 @@ class FuriruTable extends Table implements BookInfo
         ]
       ])->first();
 
-      $key_words = $books["key_words"];
+      $key_words = urlencode($books["key_words"]);
       $category_id = $books["category_id"];
       $book_status = $books["book_status"];
       $delivery_id = $books["delivery_id"];
       $transaction = $books["transaction"];
 
       $url = "https://fril.jp/s?query=".$key_words."&"."category_id=".$category_id.'&'."status=".$book_status."&transaction=".$transaction.'&'."carriage=".$delivery_id;
-      var_dump($url);
+      // var_dump($url);
       $data_array = array();
       if($this->chkurl($url)==false){
         return $data_array;
