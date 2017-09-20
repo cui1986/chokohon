@@ -17,9 +17,9 @@
 
 <div class="border books-index">
 
-<a href=<?php echo $result['url'] ?>　target="_blank">購入ページへ</a>
+<a href='<?php echo $result['url'] ?>'　target="_blank">購入ページへ</a>
 
-    <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="100"  style="border-color: #70ad47">
+    <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" style="border-color: #70ad47">
         <thead>
             <tr>
                 <th>配送料/価格</th>
@@ -40,12 +40,14 @@
 					<tr>
 				<?php
 				}
-				foreach($result['data'][$i] as $moo){
-					echo "<td>";
-					echo $moo;
-					echo "</td>";
-				}
-				echo "</tr>";
+        if(isset($result['data'][$i])){
+				  foreach($result['data'][$i] as $moo){
+  					echo "<td>";
+  					echo $moo;
+  					echo "</td>";
+  				}
+  				echo "</tr>";
+        }
 			}?>
     	</tbody>
     </table>
@@ -133,7 +135,7 @@
 
 
 <div class="border books-index">
-	     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="100"  style="border-color: #70ad47">
+	     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" style="border-color: #70ad47">
 	             <thead>
 	                 <tr>
 	                     <th>商品画像</th>
@@ -205,7 +207,7 @@
 
 
 <div class="border books-index">
-	     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="100"  style="border-color: #70ad47">
+	     <table border="1" align="center" cellspacing="0" cellpadding="10" width="800" style="border-color: #70ad47">
 	             <thead>
 	                 <tr>
 	                     <th>商品画像</th>
@@ -233,54 +235,48 @@
 
 </div>
 
-  <script>
+  <!-- <script>
       $(document).ready(function () {
-          $("#key_words").val("<?php echo $rules["key_words"] ?>");
+          $("#key_words").val("<?php echo $rakuma_rule["key_words"] ?>");
           function select_form(formId, optionValue) {
               $("#" + formId).find("option[value='" + optionValue + "']").attr("selected", true);
           }
-          select_form("category_id",<?php echo $rules["category_id"] ?>);
-          select_form("condition_type",<?php echo $rules["condition_type"] ?>);
-          select_form("postage_type",<?php echo $rules["postage_type"] ?>);
-          select_form("selling_status",<?php echo $rules["selling_status"] ?>);
+          select_form("category_id",<?php echo $rakuma_rule["category_id"] ?>);
+          select_form("condition_type",<?php echo $rakuma_rule["condition_type"] ?>);
+          select_form("postage_type",<?php echo $rakuma_rule["postage_type"] ?>);
+          select_form("selling_status",<?php echo $rakuma_rule["selling_status"] ?>);
 
           $("#book_list").find("tr:even").addClass("tr-odd");
       });
-  </script>
+  </script> -->
   <div class="book_info">
-      <div class="amazon">
+    <div class="amazon">
        <?= $this->Html->image('detailed_page_rakua.gif', ['alt' => 'らくま']);  ?>
+    </div>
+    <div class="rakuma_area">
+      <div class="rakuma_rules" id="rakuma_rules">
 
-
-      </div>
-      <div class="fril_area">
-          <div class="fril_rules" id="rakuma_rules">
-
-
-              <?= $this->Form->create(null, ['type' => 'get']); ?>
-
-              <?= $this->Form->text('key_words', ['label' => 'キーウード', 'id' => 'key_words']); ?>
-              <?= $this->Form->hidden('form_name', ['value' => 'update_rakuma_rules_form']); ?>
-              <?= $this->Form->hidden('book_id', ['value' => $id]); ?>
-              <?= $this->Form->select('category_id', ["39" => "カテゴリ", "337" => "本・雑誌/コミック", "338" => "本・雑誌/雑", "339" => "本・雑誌/文芸・小説", "340" => "本・雑誌/同人誌", "341" => "本・雑誌/ライトノベル", "342" => "本・雑誌/絵本・児童書", "343" => "本・雑誌/ライフスタイル", "344" => "本・雑誌/ビジネス", "345" => "本・雑誌/学術書", "346" => "本・雑誌/学習参考書", "347" => "本・雑誌/資格・検定", "348" => "本・雑誌/写真集", "349" => "本・雑誌/洋書", "350" => "本・雑誌/その他"], ['id' => 'category_id']); ?>
-              <?= $this->Form->select('condition_type', ["null" => "商品状態", "1" => "新品、未使用", "2" => "未使用に近い", "3" => "目立った傷や汚れなし", "4" => "傷や汚れあり", "5" => "傷や汚れあり", "6" => "全体的に状態が悪い"], ['id' => 'condition_type']); ?>
-              <?= $this->Form->select('postage_type', ["null" => "配送の負担", "1" => "着払い(購入者負担)", "2" => "送料込み(出品者負担)", "99" => "手渡し(送料負担なし) "], ['id' => 'postage_type']); ?>
-              <?= $this->Form->select('selling_status', ["null" => "販売状況", "0" => "販売中", "1" => "売り切れ"], ['id' => 'selling_status']); ?>
-              <?= $this->Form->button(__('検索')) ?>
-              <?= $this->Form->end(); ?>
-
+          <?= $this->Form->create(null, ['type' => 'get']); ?>
+          <div class="rakuma_rules">
+                <?= $this->Form->text('key_words', ['label' => 'キーウード', 'id' => 'key_words']); ?>
+                <?= $this->Form->button(__('検索')) ?>
+              <div>
+                <?= $this->Form->hidden('form_name', ['value' => 'update_rakuma_rules_form']); ?>
+                <?= $this->Form->hidden('book_id', ['value' => $id]); ?>
+                <?= $this->Form->select('category_id', ["39" => "カテゴリ", "337" => "本・雑誌/コミック", "338" => "本・雑誌/雑", "339" => "本・雑誌/文芸・小説", "340" => "本・雑誌/同人誌", "341" => "本・雑誌/ライトノベル", "342" => "本・雑誌/絵本・児童書", "343" => "本・雑誌/ライフスタイル", "344" => "本・雑誌/ビジネス", "345" => "本・雑誌/学術書", "346" => "本・雑誌/学習参考書", "347" => "本・雑誌/資格・検定", "348" => "本・雑誌/写真集", "349" => "本・雑誌/洋書", "350" => "本・雑誌/その他"], ['id' => 'category_id']); ?>
+                <?= $this->Form->select('condition_type', ["null" => "商品状態", "1" => "新品、未使用", "2" => "未使用に近い", "3" => "目立った傷や汚れなし", "4" => "傷や汚れあり", "5" => "傷や汚れあり", "6" => "全体的に状態が悪い"], ['id' => 'condition_type']); ?>
+                <?= $this->Form->select('postage_type', ["null" => "配送の負担", "1" => "着払い(購入者負担)", "2" => "送料込み(出品者負担)", "99" => "手渡し(送料負担なし) "], ['id' => 'postage_type']); ?>
+                <?= $this->Form->select('selling_status', ["null" => "販売状況", "0" => "販売中", "1" => "売り切れ"], ['id' => 'selling_status']); ?>
+                <?= $this->Form->end(); ?>
+              </div>
           </div>
       </div>
-  </div>
-  </div>
-
-
-
+    </div>
   </div>
 
 
   <div class="border books-index">
-      <table id="book_list" border="1" align="center" cellspacing="0" cellpadding="10" width="800" height="500"  style="border-color: #70ad47">
+      <table id="book_list" border="1" align="center" cellspacing="0" cellpadding="10" width="800" style="border-color: #70ad47">
           <thead>
               <tr>
                   <th>商品画像</th>
@@ -309,10 +305,9 @@
                   }
               } else {
                   ?>
-
-                  <tr>
-                      <td>何もありません；
-                      </td></tr>
+                    <tr>
+                      <td colspan="5">何もありません；</td>
+                    </tr>
               <?php }
               ?>
           </tbody>

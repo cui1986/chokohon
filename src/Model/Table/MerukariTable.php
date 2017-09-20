@@ -27,13 +27,13 @@ class MerukariTable extends Table implements BookInfo
 
     $rule = $book_rules->find('all',
       [
-        'conditions'=>['book_id' => $book_id]
+        'conditions'=>['book_id' => $book_id,'del_flg' => 0]
       ]
     )->first();
     $data_array = array();
 
     //取检索条件
-    $key_words = $rule["key_words"];
+    $key_words = urlencode($rule["key_words"]);
     $category_id = $rule["category_id"];
     $book_status = $rule["book_status"];
     $delivery_id = $rule["delivery_id"];
@@ -61,9 +61,9 @@ class MerukariTable extends Table implements BookInfo
             $temp_array['book_img'] =  $result->children[0]->children[0]->children[0]->$img_src_name;
             //贩卖情况
             if(isset($result->children[0]->children[0]->children[1]->children[0])){
-              $temp_array['sale_status'] = $result->children[0]->children[0]->children[1]->children[0]->plaintext;
+              $temp_array['sale_status'] = "売り切れ";
             }else {
-              $temp_array['sale_status'] = "";
+              $temp_array['sale_status'] = "販売中";
             }
             //书名
             $temp_array['book_name'] =  $result->children[0]->children[1]->children[0]->plaintext;

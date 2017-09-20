@@ -31,90 +31,131 @@ class BooksController extends AppController
       /* amazon start */
       $amazon_model =$this->LoadModel("Amazon");
       $result = $amazon_model->get_books($id);
+      $this->set(compact('result'));
       /* amazon end */
 
       /* merukari start*/
       $searchmerukariform = new SearchMerukariForm();
 
-      $book_rules = TableRegistry::get('merukari_rules');
+      $merukari_rules = TableRegistry::get('merukari_rules');
 
-      $rule = $book_rules->find('all', [
-        'conditions' => ['book_id' => $id]
+      $merukari_rule = $merukari_rules->find('all', [
+        'conditions' => ['book_id' => $id , ["del_flg" => 0]]
       ])->first();
 
       if($this->request->is('get') && (($this->request->getQuery('form_name')) == 'searchform_name')){
 
-          $rule['key_words'] = $this->request->getQuery('key_words');
-          $rule['category_id'] = $this->request->getQuery('category_id');
-          $rule['book_status'] = $this->request->getQuery('book_status');
-          $rule['delivery_id'] = $this->request->getQuery('delivery_id');
+          $merukari_rule['key_words'] = $this->request->getQuery('key_words');
+          $merukari_rule['category_id'] = $this->request->getQuery('category_id');
+          $merukari_rule['book_status'] = $this->request->getQuery('book_status');
+          $merukari_rule['delivery_id'] = $this->request->getQuery('delivery_id');
 
 
           if ($this->request->getQuery('sale_status') == '販売中') {
-              $rule['on_sale'] = 1;
-              $rule['sold_out'] = '';
+              $merukari_rule['on_sale'] = 1;
+              $merukari_rule['sold_out'] = '';
           }elseif ($this->request->getQuery('sale_status') == '売り切れ'){
-              $rule['on_sale'] = '';
-              $rule['sold_out'] = 1;
+              $merukari_rule['on_sale'] = '';
+              $merukari_rule['sold_out'] = 1;
           }else {
-              $rule['on_sale'] = 1;
-              $rule['sold_out'] = 1;
+              $merukari_rule['on_sale'] = 1;
+              $merukari_rule['sold_out'] = 1;
           }
-          $rule['sale_status'] = $this->request->getQuery('sale_status');
-          $book_rules->save($rule);
+          $merukari_rule['sale_status'] = $this->request->getQuery('sale_status');
+          $merukari_rules->save($merukari_rule);
     }
 
-      $this->request->data('key_words',$rule["key_words"]);
-      $this->request->data('category_id',$rule["category_id"]);
-      $this->request->data('book_status',$rule["book_status"]);
-      $this->request->data('delivery_id',$rule["delivery_id"]);
-      $this->request->data('sale_status',$rule["sale_status"]);
+      $this->request->data('key_words',$merukari_rule["key_words"]);
+      $this->request->data('category_id',$merukari_rule["category_id"]);
+      $this->request->data('book_status',$merukari_rule["book_status"]);
+      $this->request->data('delivery_id',$merukari_rule["delivery_id"]);
+      $this->request->data('sale_status',$merukari_rule["sale_status"]);
 
       $this->loadModel('Merukari');
       $merukari = new MerukariTable();
       $merukari = $merukari->get_books($id);
 
-      /* merukari end */
-      /* rakuma start */
-      $rakuma = new RakumaTable;
-              $rulesTable = TableRegistry::get('RakumaRules');
-              $queryData = $this->request->getQuery();
-              $id = isset($id) ? $id : $id = $queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
-
-              if (!isset($queryData["key_words"]) || $queryData["key_words"] == null||$queryData["key_words"] == "") {
-                  $this->Flash->error(__('検索キーワードを入力してください'));
-              } else {
-                  $queryData["key_words"] = $rakuma->queryFilter($queryData["key_words"]); //过滤关键词
-              }
-
-              // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
-              //读取数据库里的搜索规则
-              $rules = $rulesTable->find('all', [
-                'conditions' => ['book_id' => $id,["del_flg" => "0"]],
-              ])->first();
-              if (isset($queryData["form_name"]) && $queryData["form_name"] == "update_rakuma_rules_form") {    //存入数据库
-                  $rules = $rulesTable->patchEntity($rules, $queryData);
-                  if ($rulesTable->save($rules)) {
-                      $this->Flash->success(__('検索条件が更新されました'));
-                  } else {
-                      $this->Flash->error(__('システムエラー、保存できません'));
-                  }
-              }
-              if (isset($id)) {
-
-                  $rakuma = $rakuma->get_books($id);
-              } // 将各种值送到前台；
-
-
-          /* rakuma end */
-      $this->set(compact('rules'));
-      $this->set(compact('rakuma'));
-      $this->set(compact('id'));
-      $this->set(compact('queryData'));
-      $this->set(compact('book'));
       $this->set(compact('merukari'));
       $this->set(compact('searchmerukariform'));
-      $this->set(compact('result'));
+
+      /* merukari end */
+
+      /* rakuma start */
+      $rakuma = new RakumaTable;
+      $rakuma_rules = TableRegistry::get('RakumaRules');
+      $rakuma_queryData = $this->request->getQuery();
+      $id = isset($id) ? $id : $id = $rakuma_queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
+
+      if (!isset($rakuma_queryData["key_words"]) || $rakuma_queryData["key_words"] == null||$rakuma_queryData["key_words"] == "") {
+          $this->Flash->error(__('検索キーワードを入力してください'));
+      } else {
+          $rakuma_queryData["key_words"] = $rakuma->queryFilter($rakuma_queryData["key_words"]); //过滤关键词
+      }
+
+      // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
+      //读取数据库里的搜索规则
+      $rakuma_rule = $rakuma_rules->find('all', [
+        'conditions' => ['book_id' => $id,["del_flg" => 0]],
+      ])->first();
+      if (isset($rakuma_queryData["form_name"]) && $rakuma_queryData["form_name"] == "update_rakuma_rules_form") {    //存入数据库
+          $rakuma_rule = $rakuma_rules->patchEntity($rakuma_rule, $rakuma_queryData);
+          if ($rakuma_rules->save($rakuma_rule)) {
+              $this->Flash->success(__('検索条件が更新されました'));
+          } else {
+              $this->Flash->error(__('システムエラー、保存できません'));
+          }
+      }
+      if (isset($id)) {
+          $rakuma = $rakuma->get_books($id);
+      }
+
+      $this->set(compact('rakuma_rule'));
+      $this->set(compact('rakuma'));
+      /* rakuma end */
+
+      /* furiru start */
+      // $searchFuriruForm = new SearchFuriruForm();
+      // $furiru_queryData = $this->request->getQuery();
+      // $id = isset($id) ? $id : $id = $furiru_queryData["id"];
+      // if($this->request->getQuery('form_name') && $this->request->getQuery('form_name') == "search_furiru_form") {
+      //
+      //   $searchFuriruForm->execute($this->request->getQueryParams());
+      //   //入力した内容の値を設定する
+      //   $conditions = array();
+      //
+      //   $furiru_ruses = TableRegistry::get('fril_rules');
+      //   $furiru_rule = $furiru_model->find('all', [
+      //     'conditions' => ['book_id' => $id,["del_flg" => 0]],
+      //   ])->first();
+      //   $furiru_rule = $furiru_ruses->patchEntity($furiru_rule,$furiru_queryData);
+      //
+      //
+      //
+      //   if ($furiru_ruses->save($furiru_rule)) {
+      //     $this->Flash->success(__('検索条件が更新されました'));
+      //   } else {
+      //     $this->Flash->error(__('検索条件を保存できませんでした。'));
+      //   }
+      //
+      //   $this->request->data('key_words', $this->request->getQuery('key_words'));
+      //   $this->request->data('category_id', $this->request->getQuery('category_id'));
+      //   $this->request->data('book_status', $this->request->getQuery('book_status'));
+      //   $this->request->data('transaction', $this->request->getQuery('transaction'));
+      //   $this->request->data('carriage', $this->request->getQuery('carriage'));
+      //
+      //   if ($id) {
+      //       //フリルテーブルのインスタンスを生成する
+      //       $furiru = new FuriruTable;
+      //       //FuriruTableの中のget_booksのファンクションを使用し、id=1のデータを転送させる
+      //       $furiru = $furiru->get_books($id);
+      //   }
+      // }
+      // $this->set(compact('searchFuriruForm'));
+      // $this->set(compact('furiru'));
+      /* furiru end */
+
+      $this->set(compact('id'));
+      $this->set(compact('book'));
     }
 
     public function add() {
