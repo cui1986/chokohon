@@ -13,7 +13,13 @@
 </head>
 <body>
      <div class="divcss5">
-         <?php echo $this->Html->image("logo.png");?>
+         <a href="<?php echo $this->Url->build([
+                        "controller" => "books",
+                        "action" => "index"]);
+                  ?>"
+                  target="_blank">
+    <?php echo $this->Html->image("logo.png");?>
+        </a>
      </div>
      <div class="divcss5 navi">
         <div>
@@ -38,7 +44,9 @@
      </div>
      <div class="divcss5 title">
          <div>
-             <h1>図書一覧</h1>
+          <?php if ($this->request->action == "index"){  ?> <h1>図書一覧</h1><?php }?>
+          <?php if ($this->request->action == "add"){  ?> <h1>図書新規</h1><?php }?>
+          <?php if ($this->request->action == "edit"){  ?> <h1>図書編集</h1><?php }?>
          </div>
      </div>
 
