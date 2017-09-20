@@ -26,7 +26,7 @@ class SearchFuriruForm extends Form
             ->addField('carriage', ['type' => 'int'])
 
             //販売状況
-            ->addField('sale_status', ['type' => 'string']);
+            ->addField('transaction', ['type' => 'string']);
     }
 }
 ?>

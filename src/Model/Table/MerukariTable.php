@@ -27,13 +27,13 @@ class MerukariTable extends Table implements BookInfo
 
     $rule = $book_rules->find('all',
       [
-        'conditions'=>['book_id' => $book_id]
+        'conditions'=>['book_id' => $book_id,'del_flg' => 0]
       ]
     )->first();
     $data_array = array();
 
     //取检索条件
-    $key_words = $rule["key_words"];
+    $key_words = urlencode($rule["key_words"]);
     $category_id = $rule["category_id"];
     $book_status = $rule["book_status"];
     $delivery_id = $rule["delivery_id"];
@@ -41,7 +41,7 @@ class MerukariTable extends Table implements BookInfo
     $sold_out = $rule["sold_out"];
 
     //解析url
-    $url =  "https://www.mercari.com/jp/search/?sort_order=&keyword={$key_words}&category_root=5&category_child=72&category_grand_child[{$category_id}]=1&brand_name=&brand_id=&size_group=&price_min=&price_max=&item_condition_id[{$book_status}]=1&shipping_payer_id[{$delivery_id}]=1&status_on_sale={$on_sale}&status_trading_sold_out={$sold_out}";
+    $url =  "https://www.mercari.com/jp/search/?sort_order=&keyword={$key_words}" . "&category_root=5&category_child=72&category_grand_child[{$category_id}]=1" . "&brand_name=&brand_id=&size_group=&price_min=&price_max=&item_condition_id[{$book_status}]=1" . "&shipping_payer_id[{$delivery_id}]=1" . "&status_on_sale={$on_sale}" . "&status_trading_sold_out={$sold_out}";
 
     $html = file_get_html($url);
 
@@ -61,9 +61,9 @@ class MerukariTable extends Table implements BookInfo
             $temp_array['book_img'] =  $result->children[0]->children[0]->children[0]->$img_src_name;
             //贩卖情况
             if(isset($result->children[0]->children[0]->children[1]->children[0])){
-              $temp_array['sale_status'] = $result->children[0]->children[0]->children[1]->children[0]->plaintext;
+              $temp_array['sale_status'] = "売り切れ";
             }else {
-              $temp_array['sale_status'] = "";
+              $temp_array['sale_status'] = "販売中";
             }
             //书名
             $temp_array['book_name'] =  $result->children[0]->children[1]->children[0]->plaintext;
