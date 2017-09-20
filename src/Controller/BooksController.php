@@ -91,7 +91,6 @@ class BooksController extends AppController
       } else {
           $rakuma_queryData["key_words"] = $rakuma->queryFilter($rakuma_queryData["key_words"]); //过滤关键词
       }
-
       // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
       //读取数据库里的搜索规则
       $rakuma_rule = $rakuma_rules->find('all', [
@@ -219,12 +218,14 @@ class BooksController extends AppController
            //如果请求中的bookname等于存在数据库中的bookname，则直接将数据只存在books一张table里
           if(($this->request->getData("book_name")) && ($this->request->getData("book_name") == $book->book_name) ){
             $book = $this->Books->patchEntity($book, $this->request->getData());
-            $this->Books->save($book);
+            if($this->Books->save($book)){
 
             $this->Flash->success(__('編集は成功しました.'));
             return $this->redirect(['action' => 'index']);
+          }
+              $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
             //如果请求中的bookname等于存在数据库中的bookname，则直接将数据只存在books一张table里
-           } else {
+          } else {
              //如果请求中的bookname跟存在数据中的bookname不相同
              //请求中的bookname的值等于keyword
               $book = $this->Books->patchEntity($book, $this->request->getData());
@@ -234,34 +235,54 @@ class BooksController extends AppController
               $book->book_name = $this->request->getData("book_name");
 
 
-              $this->Books->save($book);
-              $this->Merukari->save($book->merukari);
-              $this->Rakuma->save($book->rakuma);
-              $this->Furiru->save($book->furiru);
 
-              $this->Flash->success(__('編集は成功しました.'));
+          if( $this->Books->save($book) &&
+              $this->Merukari->save($book->merukari) &&
+              $this->Rakuma->save($book->rakuma) &&
+              $this->Furiru->save($book->furiru)){
 
-              return $this->redirect(['action' => 'index']);
-            }
+                  $this->Flash->success(__('編集は成功しました.'));
 
-            $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
-      }
+                  return $this->redirect(['action' => 'index']);
+          }
 
+                   $this->Flash->error(__('編集は失敗しました、もう一度試してください.'));
+                 }
+     }
 
       $this->set(compact('book'));
       $this->set('_serialize', ['book']);
-   }
+
+}
 
 
     public function delete($id = null) {
-        $this->request->allowMethod(['post', 'delete']);
-        $book = $this->Books->get($id);
-        if ($this->Books->delete($book)) {
-            $this->Flash->success(__('削除しました.'));
+        $this->loadModel('Books');
+        $this->loadModel('Furiru');
+        $this->loadModel('Merukari');
+        $this->loadModel('Rakuma');
+
+        // $this->request->allowMethod(['post', 'delete']);
+
+        $book = $this->Books->get($id, [
+            'contain' => ['Furiru','Merukari','Rakuma']
+        ]);
+
+        $book->furiru->del_flg = 1;
+        $book->merukari->del_flg = 1;
+        $book->rakuma->del_flg = 1;
+        $book->del_flg = 1;
+
+        if( $this->Books->save($book) &&
+            $this->Merukari->save($book->merukari) &&
+            $this->Rakuma->save($book->rakuma) &&
+            $this->Furiru->save($book->furiru)){
+
+                $this->Flash->success(__('削除は成功しました.'));
+
+                return $this->redirect(['action' => 'index']);
         } else {
             $this->Flash->error(__('削除は失敗しました、もう一度試してください.'));
         }
-
-        return $this->redirect(['action' => 'index']);
     }
 }

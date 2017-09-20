@@ -14,8 +14,9 @@
 	        </tr>
 	     </thead>
        <tbody>
-       <?php $i=0; ?>
+       <?php $i=0;?>
        <?php foreach ($books as $book): ?>
+       <?php if($book->del_flg == 0){?>
          <tr <?= ($i%2 != 1)?'class="tr-odd"':'' ?>>
            <?php $i++; ?>
              <td><?= h($book->book_isbn) ?></td>
@@ -25,7 +26,7 @@
              <td><input type="button" value="详细" style="background: #96c83d" onclick="location.href='<?php echo $this->Url->build([
                            "controller" => "books",
                            "action" => "view",
-                           $book->id
+                            $book->id
 
                          ]);
                          ?>'">
@@ -39,11 +40,25 @@
                          ?>'">
  						</td>
               <td>
-                <input type="button" value="削除" onclick="location.href='localhost/chukohon/books/delete'">
+              <input type="button" value="delete" style="background: #96c83d" onclick="
+
+              if(window.confirm('本当に削除したいですか?')) {
+                location.href='<?php echo $this->Url->build([
+                              'type' => 'post',
+                              "controller" => "books",
+                              "action" => "delete",
+                               $book->id
+                            ]);
+                            ?>';
+              }"
+              >
               </td>
+
+
           </tr>
 
-        <?php endforeach; ?>
+        <?php }
+        endforeach; ?>
 	      </tbody>
 	     </table>
        <div class="paginator">
