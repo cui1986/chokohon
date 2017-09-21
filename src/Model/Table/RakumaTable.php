@@ -32,12 +32,12 @@ class RakumaTable extends Table implements BookInfo {
         return $query;
     }
 
-    private function getRakumaUrl($keyWord = NULL, $keyWordBak = NULL,$categoryId = NULL, $conditionType = NULL, $postageType = NULL, $sellingStatus = NULL) {
+    private function getRakumaUrl($keyWord = NULL, $keyWordBak = NULL, $categoryId = NULL, $conditionType = NULL, $postageType = NULL, $sellingStatus = NULL) {
         if ($keyWord == NULL) {
             return NULL;
         } else {
             $query = "key_words=" . urlencode($keyWord);
-            $query = $query."&keyword=" . urlencode($keyWordBak);
+            $query = $query . "&keyword=" . urlencode($keyWordBak);
             $query = ($categoryId == NULL || $categoryId == "") ? $query : $query . "&category_id=" . $categoryId;
             $query = ($conditionType == NULL || $conditionType == "") ? $query : $query . "&condition_type=" . $conditionType;
             $query = ($postageType == NULL || $postageType == "") ? $query : $query . "&postage_type=" . $postageType;
@@ -89,13 +89,15 @@ class RakumaTable extends Table implements BookInfo {
     function get_books(int $book_id) {
 
         $rules = TableRegistry::get('RakumaRules');
-        $bookRule = $rules->find('all')->where(['book_id' => $book_id])->first();
+
+        $bookRule = $rules->find('all', [
+                    'conditions' => ['book_id' => $book_id, ["del_flg" => 0]],
+                ])->first();
         if ($bookRule['category_id'] == NUll || $bookRule['category_id'] == "") {
             $bookRule['category_id'] = 39;
 //            var_dump($bookRule['category_id']);
         }
 //        var_dump($bookRule['category_id']);
-
 //        $url = $this->makeUrl('https://api.rakuma.rakuten.co.jp/search-api/rest/product/search', array("key_words" => $bookRule['key_words'],"keyword" => "$bookRule['key_words']),["category_id" => $bookRule['category_id'], "condition_type" => $bookRule['condition_type'], "postage_type" => $bookRule['postage_type'], "selling_status" => $bookRule['selling_status']]);
         $url = $this->getRakumaUrl($bookRule["key_words"], $bookRule["key_words"], $bookRule["category_id"], $bookRule["condition_type"], $bookRule["postage_type"], $bookRule["selling_status"]);
 
