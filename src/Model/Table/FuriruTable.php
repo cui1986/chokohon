@@ -33,7 +33,8 @@ class FuriruTable extends Table implements BookInfo
       $books = $book_model->find("all",
       [
         "conditions" => [
-          "book_id" => $book_id
+          "book_id" => $book_id,
+          'del_flg' => 0
         ]
       ])->first();
 

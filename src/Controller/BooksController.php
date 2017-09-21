@@ -26,11 +26,14 @@ class BooksController extends AppController
 
     public function view($id = null)
     {
+      /* book info */
       $this->loadModel("Books");
       $book = $this->Books->get($id);
+
       /* amazon start */
       $amazon_model =$this->LoadModel("Amazon");
       $result = $amazon_model->get_books($id);
+      
       $this->set(compact('result'));
       /* amazon end */
 

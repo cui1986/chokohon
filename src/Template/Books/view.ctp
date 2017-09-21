@@ -42,10 +42,9 @@
                 <th>配送</th>
             </tr>
     	</thead>
-
     	<tbody>
     	<?php
-			for($i=0;$i<sizeof($result);$i++){
+			for($i=0;$i<sizeof($result['data']);$i++){
 				if($i%2==0){  ?>
 					<tr class="tr-odd">
 				<?php
