@@ -81,35 +81,37 @@ class BooksController extends AppController
       /* merukari end */
 
       /* rakuma start */
-      $rakuma = new RakumaTable;
-      $rakuma_rules = TableRegistry::get('RakumaRules');
-      $rakuma_queryData = $this->request->getQuery();
-      $id = isset($id) ? $id : $id = $rakuma_queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
+        $rakuma = new RakumaTable;
+        $rakuma_rules = TableRegistry::get('RakumaRules');
+        $rakuma_queryData = $this->request->getQuery();
+        $id = isset($id) ? $id : $id = $rakuma_queryData["book_id"];     //防止ID丢失，获取BOOK_ID值；
+        if (!isset($rakuma_queryData["key_words"]) || $rakuma_queryData["key_words"] == null || $rakuma_queryData["key_words"] == "") {
+            $this->Flash->error(__('検索キーワードを入力してください'));
+        } else {
+            $rakuma_queryData["key_words"] = $rakuma->queryFilter($rakuma_queryData["key_words"]); //过滤关键词
+        }
+        $rakuma_rule = $rakuma_rules->find('all', [
+                    'conditions' => ['book_id' => $id, ["del_flg" => 0]],
+                ])->first();
+        if (isset($rakuma_queryData["form_name"]) && $rakuma_queryData["form_name"] == "update_rakuma_rules_form") {    //存入数据库
+            $rakuma_rule = $rakuma_rules->patchEntity($rakuma_rule, $rakuma_queryData);
+            if ($rakuma_rules->save($rakuma_rule)) {
+                $this->Flash->success(__('検索条件が更新されました'));
+            } else {
+                $this->Flash->error(__('システムエラー、保存できません'));
+            }
+        }
 
-      if (!isset($rakuma_queryData["key_words"]) || $rakuma_queryData["key_words"] == null||$rakuma_queryData["key_words"] == "") {
-          $this->Flash->error(__('検索キーワードを入力してください'));
-      } else {
-          $rakuma_queryData["key_words"] = $rakuma->queryFilter($rakuma_queryData["key_words"]); //过滤关键词
-      }
-      // $rules = $rulesTable->get(["book_id" => $id], ["del_flg" => "0"]);
-      //读取数据库里的搜索规则
-      $rakuma_rule = $rakuma_rules->find('all', [
-        'conditions' => ['book_id' => $id,["del_flg" => 0]],
-      ])->first();
-      if (isset($rakuma_queryData["form_name"]) && $rakuma_queryData["form_name"] == "update_rakuma_rules_form") {    //存入数据库
-          $rakuma_rule = $rakuma_rules->patchEntity($rakuma_rule, $rakuma_queryData);
-          if ($rakuma_rules->save($rakuma_rule)) {
-              $this->Flash->success(__('検索条件が更新されました'));
-          } else {
-              $this->Flash->error(__('システムエラー、保存できません'));
-          }
-      }
-      if (isset($id)) {
-          $rakuma = $rakuma->get_books($id);
-      }
-
-      $this->set(compact('rakuma_rule'));
-      $this->set(compact('rakuma'));
+        if (isset($id)) {
+            $rakuma = $rakuma->get_books($id);
+        }
+        $this->request->data('key_words', $rakuma_rule["key_words"]);
+        $this->request->data('category_id', $rakuma_rule["category_id"]);
+        $this->request->data('condition_type', $rakuma_rule["condition_type"]);
+        $this->request->data('postage_type', $rakuma_rule["postage_type"]);
+        $this->request->data('selling_status', $rakuma_rule["selling_status"]);
+        $this->set(compact('rakuma_rule'));
+        $this->set(compact('rakuma'));
       /* rakuma end */
 
       /* furiru start */
